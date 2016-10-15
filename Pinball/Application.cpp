@@ -3,6 +3,7 @@
 #include "ModuleWindow.h"
 #include "ModuleRender.h"
 #include "ModuleTextures.h"
+#include "ModuleLevel.h"
 #include "ModuleInput.h"
 #include "ModuleAudio.h"
 #include "ModulePlayer.h"
@@ -16,6 +17,7 @@ Application::Application()
 	renderer = new ModuleRender(this);
 	window = new ModuleWindow(this);
 	textures = new ModuleTextures(this);
+	level = new ModuleLevel(this);
 	input = new ModuleInput(this);
 	audio = new ModuleAudio(this, true);
 	player = new ModulePlayer(this);
@@ -31,6 +33,7 @@ Application::Application()
 	AddModule(physics);
 	AddModule(renderer);
 	AddModule(textures);
+	AddModule(level);
 	AddModule(input);
 	AddModule(audio);
 	

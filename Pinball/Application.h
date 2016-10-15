@@ -7,11 +7,13 @@ class Module;
 class ModuleRender;
 class ModuleWindow;
 class ModuleTextures;
+class ModuleLevel;
 class ModuleInput;
 class ModuleAudio;
 class ModulePlayer;
 class ModuleSceneIntro;
 class ModulePhysics;
+
 
 class Application
 {
@@ -19,6 +21,7 @@ public:
 	ModuleRender* renderer;
 	ModuleWindow* window;
 	ModuleTextures* textures;
+	ModuleLevel* level;
 	ModuleInput* input;
 	ModuleAudio* audio;
 	ModulePlayer* player;
