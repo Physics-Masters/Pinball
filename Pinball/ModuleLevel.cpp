@@ -53,8 +53,8 @@ update_status ModuleLevel::Update()
 	}
 
 	App->renderer->Blit(ground, 0, 0, { (256, 432, 0, 0) }, 1.0f);
-	App->renderer->Blit(lvl1, 0, 5, { (256, 432, 0, 0) }, 1.0f);
-	App->renderer->Blit(lvl2, 0, -5, { (256, 432, 0, 0) }, 1.0f);
+	App->renderer->Blit(lvl1, 0, 15, { (256, 432, 0, 0) }, 1.0f);
+	App->renderer->Blit(lvl2, 0, 0, { (256, 432, 0, 0) }, 1.0f);
 	
 	
 	if (atground == true)
