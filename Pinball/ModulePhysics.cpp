@@ -441,3 +441,8 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 	if(physB && physB->listener != NULL)
 		physB->listener->OnCollision(physB, physA);
 }
+
+void ModulePhysics::DestroyBodys(PhysBody &body)
+{
+	world->DestroyBody(body.body);
+}

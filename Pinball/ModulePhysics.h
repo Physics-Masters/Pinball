@@ -52,6 +52,7 @@ public:
 	void PaddleStop();
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
+	void DestroyBodys(PhysBody &body);
 
 private:
 

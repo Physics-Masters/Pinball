@@ -354,7 +354,7 @@ update_status ModuleLevel::Update()
 void ModuleLevel::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
 	int x, y;
-	if (bodyB->body->GetType() == b2Shape::e_circle || bodyA->body->GetType() == b2Shape::e_circle)
+	/*if ((bodyB->body->GetType() == b2Shape::e_circle || bodyA->body->GetType() == b2Shape::e_circle) && (bodyA->body->GetFixtureList()->IsSensor || bodyB->body->GetFixtureList()->IsSensor))
 	{
 		if (bodyA == lvl1sensor || bodyB == lvl1sensor || bodyA == lvl1sensor2 || bodyB == lvl1sensor2)
 		{
@@ -374,5 +374,5 @@ void ModuleLevel::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 				LOG("AT background, %d g, %d lvl1", atground, atlvl1)
 			}
 		}		
-	}
+	}*/
 }

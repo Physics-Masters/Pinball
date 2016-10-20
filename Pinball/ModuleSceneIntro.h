@@ -24,7 +24,7 @@ public:
 	p2List<PhysBody*> boxes;
 	p2List<PhysBody*> ricks;
 	PhysBody* pad;
-	PhysBody* sensor;
+	
 	bool sensed;
 
 	SDL_Texture* circle;
