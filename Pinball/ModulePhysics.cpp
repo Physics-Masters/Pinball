@@ -39,7 +39,9 @@ bool ModulePhysics::Start()
 	int x = SCREEN_WIDTH / 2;
 	int y = SCREEN_HEIGHT / 1.5f;
 	int diameter = SCREEN_WIDTH / 2;
-
+	//PADDLE
+	
+	
 	
 	return true;
 }
@@ -62,6 +64,87 @@ update_status ModulePhysics::PreUpdate()
 
 	return UPDATE_CONTINUE;
 }
+//creates paddles
+PhysBody* ModulePhysics::CreatePaddle(int x, int y, float angd, float angu)
+{
+	//cirlce
+	b2BodyDef body;
+	body.type = b2_staticBody;
+	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	b2Body* b = world->CreateBody(&body);
+
+	b2CircleShape shape;
+	shape.m_radius = PIXEL_TO_METERS(4);
+	b2FixtureDef fixture;
+	fixture.shape = &shape;
+	fixture.density = 1.0f;
+
+	b->CreateFixture(&fixture);
+	
+	PhysBody* pbody = new PhysBody();
+	pbody->body = b;
+	b->SetUserData(pbody);
+	pbody->width = pbody->height = 50;
+	//rectangle
+	b2BodyDef body2;
+	body2.type = b2_dynamicBody;
+	body2.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	b2Body* b2 = world->CreateBody(&body2);
+
+	b2PolygonShape shape2;
+	shape2.SetAsBox(PIXEL_TO_METERS(25) * 0.5f, PIXEL_TO_METERS(4) * 0.5f);
+	b2FixtureDef fixture2;
+	fixture2.shape = &shape2;
+	fixture2.density = 2.0f;
+
+	b2->CreateFixture(&fixture2);
+	
+	PhysBody* pbody2 = new PhysBody();
+	pbody->body = b2;
+	b2->SetUserData(pbody2);
+	pbody->width = pbody->height = 40;
+	//REVOLUTION JOINT
+	b2RevoluteJointDef revoluteJointDef;
+	revoluteJointDef.bodyA = b;
+	revoluteJointDef.bodyB = b2;
+	revoluteJointDef.localAnchorA.Set(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0));
+	revoluteJointDef.localAnchorB.Set(PIXEL_TO_METERS(-13), PIXEL_TO_METERS(2.5));
+	revoluteJointDef.referenceAngle = 0;
+	revoluteJointDef.collideConnected = false;
+	revoluteJointDef.enableMotor = false;
+	revoluteJointDef.maxMotorTorque = 500;
+	revoluteJointDef.motorSpeed = -1000 * DEGTORAD;
+	revoluteJointDef.enableLimit = true;
+	revoluteJointDef.lowerAngle = angu;
+	revoluteJointDef.upperAngle = angd;
+	//paddles = (b2RevoluteJoint*)world->CreateJoint(&revoluteJointDef);
+	paddleList.add((b2RevoluteJoint*)world->CreateJoint(&revoluteJointDef));
+	return pbody;
+}
+//moves paddles
+void ModulePhysics::PaddleMove()
+{
+	//p2List_item<PhysBody*>*temp = App->scene_intro->paddles.getFirst()->data->body->GetJointList;
+	p2List_item<b2RevoluteJoint*> *temp = paddleList.getFirst();
+	while (temp != nullptr)
+	{
+		temp->data->EnableMotor(true);
+		temp = temp->next;
+	}
+	//paddles->EnableMotor(true);
+	
+}
+void ModulePhysics::PaddleStop()
+{
+	p2List_item<b2RevoluteJoint*> *temp = paddleList.getFirst();
+	while (temp!= nullptr)
+	{
+		temp->data->EnableMotor(false);
+		temp = temp->next;
+	}
+}
 
 PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius)
 {
@@ -75,7 +158,7 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius)
 	shape.m_radius = PIXEL_TO_METERS(radius);
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
-	fixture.density = 1.0f;
+	fixture.density = 2.0f;
 
 	b->CreateFixture(&fixture);
 

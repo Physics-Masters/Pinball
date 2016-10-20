@@ -4,6 +4,7 @@
 #include "p2Point.h"
 #include "Globals.h"
 
+
 class PhysBody;
 
 class ModuleSceneIntro : public Module
@@ -19,13 +20,15 @@ public:
 
 public:
 	p2List<PhysBody*> circles;
+	p2List<PhysBody*> paddles;
 	p2List<PhysBody*> boxes;
 	p2List<PhysBody*> ricks;
-
+	PhysBody* pad;
 	PhysBody* sensor;
 	bool sensed;
 
 	SDL_Texture* circle;
+	SDL_Texture* paddle;
 	SDL_Texture* box;
 	SDL_Texture* rick;
 	uint bonus_fx;

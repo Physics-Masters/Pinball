@@ -1,5 +1,6 @@
 #pragma once
 #include "Module.h"
+#include "ModuleSceneIntro.h"
 #include "Globals.h"
 #include "Box2D/Box2D/Box2D.h"
 
@@ -46,7 +47,9 @@ public:
 	PhysBody* CreateRectangle(int x, int y, int width, int height);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
 	PhysBody* CreateChain(int x, int y, int* points, int size);
-
+	PhysBody* CreatePaddle(int x, int y, float angd, float angu);
+	void PaddleMove();
+	void PaddleStop();
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
 
@@ -55,5 +58,7 @@ private:
 	bool debug;
 	b2World* world;
 	b2MouseJoint* mouse_joint;
+	b2RevoluteJoint* paddles;
+	p2List<b2RevoluteJoint*> paddleList;
 	b2Body* ground;
 };
