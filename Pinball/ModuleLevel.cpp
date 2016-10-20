@@ -353,26 +353,28 @@ update_status ModuleLevel::Update()
 
 void ModuleLevel::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
-	int x, y;
-	/*if ((bodyB->body->GetType() == b2Shape::e_circle || bodyA->body->GetType() == b2Shape::e_circle) && (bodyA->body->GetFixtureList()->IsSensor || bodyB->body->GetFixtureList()->IsSensor))
+	if (bodyA->body != nullptr && bodyB->body != nullptr)
 	{
-		if (bodyA == lvl1sensor || bodyB == lvl1sensor || bodyA == lvl1sensor2 || bodyB == lvl1sensor2)
+		if (bodyB->body->GetType() == b2Shape::e_circle || bodyA->body->GetType() == b2Shape::e_circle)
 		{
-			if (atground == true)
+			if (bodyA == lvl1sensor || bodyB == lvl1sensor || bodyA == lvl1sensor2 || bodyB == lvl1sensor2)
 			{
-				atground = false;
-				atlvl1 = true;
-				LOG("AT LVL 1, %d g, %d l1", atground, atlvl1)
+				if (atground == true)
+				{
+					atground = false;
+					atlvl1 = true;
+					LOG("AT LVL 1, %d g, %d l1", atground, atlvl1)
+				}
+			}
+			if (bodyA == growndsensor || bodyB == growndsensor || bodyA == growndsensor2 || bodyB == growndsensor2)
+			{
+				if (atground == false)
+				{
+					atground = true;
+					atlvl1 = false;
+					LOG("AT background, %d g, %d lvl1", atground, atlvl1)
+				}
 			}
 		}
-		if (bodyA == growndsensor || bodyB == growndsensor || bodyA == growndsensor2 || bodyB == growndsensor2)
-		{
-			if (atground == false)
-			{
-				atground = true;
-				atlvl1 = false;
-				LOG("AT background, %d g, %d lvl1", atground, atlvl1)
-			}
-		}		
-	}*/
+	}
 }
