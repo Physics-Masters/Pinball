@@ -15,13 +15,17 @@ public:
 	bool Start();
 	update_status Update();
 	bool CleanUp();
+	void OnCollision(PhysBody*, PhysBody*);
 
 
 public:
-	p2List<PhysBody*> groundchain;
-	p2List<PhysBody*> lvl1chain;
-	p2List<PhysBody*> lvl2chain;
-
+	PhysBody* groundchain;
+	PhysBody* lvl1chain;
+	PhysBody* lvl2chain;
+	PhysBody* growndsensor;
+	PhysBody* growndsensor2;
+	PhysBody* lvl1sensor;
+	PhysBody* lvl1sensor2;
 	
 	bool atground;
 	bool atlvl1;
