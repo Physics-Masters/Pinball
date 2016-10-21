@@ -47,9 +47,13 @@ public:
 	PhysBody* CreateRectangle(int x, int y, int width, int height);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
 	PhysBody* CreateChain(int x, int y, int* points, int size);
-	PhysBody* CreatePaddle(int x, int y, float angd, float angu);
-	void PaddleMove();
-	void PaddleStop();
+	PhysBody* CreatePaddleL(int x, int y, float angd, float angu);
+	PhysBody* CreatePaddleR(int x, int y, float angd, float angu);
+	void PaddleMoveR();
+	void PaddleStopR();
+	void PaddleMoveL();
+	void PaddleStopL();
+
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
 	void DestroyBodys(PhysBody &body);
@@ -61,5 +65,6 @@ private:
 	b2MouseJoint* mouse_joint;
 	b2RevoluteJoint* paddles;
 	p2List<b2RevoluteJoint*> paddleList;
+	p2List<b2RevoluteJoint*> paddleListR;
 	b2Body* ground;
 };

@@ -28,14 +28,17 @@ bool ModuleSceneIntro::Start()
 
 	circle = App->textures->Load("pinball/ball.png");
 	paddle = App->textures->Load("pinball/paddle.png");
+	paddle2 = App->textures->Load("pinball/paddle2.png");
 	box = App->textures->Load("pinball/crate.png");
 	rick = App->textures->Load("pinball/rick_head.png");
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 	
 	
 	//LEFT PADDLES
-	paddles.add(App->physics->CreatePaddle(90, 385, (40 * DEGTORAD), -30 * DEGTORAD));
-	paddles.add(App->physics->CreatePaddle(37, 187, (70 * DEGTORAD), 35 * DEGTORAD));
+	paddlesL.add(App->physics->CreatePaddleL(90, 385, (40 * DEGTORAD), -30 * DEGTORAD));
+	paddlesL.add(App->physics->CreatePaddleL(37, 187, (70 * DEGTORAD), 35 * DEGTORAD));
+	paddlesR.add(App->physics->CreatePaddleR(150, 385, (146 * DEGTORAD), 78 * DEGTORAD));
+	paddlesR.add(App->physics->CreatePaddleR(222, 258, (100 * DEGTORAD), 40 * DEGTORAD));
 	return ret;
 }
 
@@ -59,11 +62,20 @@ update_status ModuleSceneIntro::Update()
 	//MAKES PADDLES MOVE
 	if (App->input->GetKey(SDL_SCANCODE_Q) == KEY_DOWN)
 	{
-		App->physics->PaddleMove();
+		App->physics->PaddleMoveL();
 	}
 	if (App->input->GetKey(SDL_SCANCODE_Q) == KEY_UP)
 	{
-		App->physics->PaddleStop();
+		App->physics->PaddleStopL();
+
+	}
+	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN)
+	{
+		App->physics->PaddleMoveR();
+	}
+	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_UP)
+	{
+		App->physics->PaddleStopR();
 
 	}
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
@@ -129,16 +141,24 @@ update_status ModuleSceneIntro::Update()
 	fVector normal(0.0f, 0.0f);
 
 	// All draw functions ------------------------------------------------------
-	p2List_item<PhysBody*>* c = paddles.getFirst();
+	p2List_item<PhysBody*>* c = paddlesL.getFirst();
 	while (c != NULL)
 	{
 		int x, y;
 		c->data->GetPosition(x, y);
 		
-		App->renderer->Blit(paddle, x, y, NULL, 1.0f, c->data->GetRotation(),0,0);
+		App->renderer->Blit(paddle, x-1, y, NULL, 1.0f, c->data->GetRotation(),0,0);
 		c = c->next;
 	}
+	 c = paddlesR.getFirst();
+	 while (c != NULL)
+	 {
+		 int x, y;
+		 c->data->GetPosition(x, y);
 
+		 App->renderer->Blit(paddle2, x, y, NULL, 1.0f, c->data->GetRotation(), 0, 0);
+		 c = c->next;
+	 }
 	 c = circles.getFirst();
 
 	while(c != NULL)
@@ -146,7 +166,7 @@ update_status ModuleSceneIntro::Update()
 		int x, y;
 		c->data->GetPosition(x, y);
 		//if(c->data->Contains(App->input->GetMouseX(), App->input->GetMouseY()))
-			App->renderer->Blit(circle, x, y, NULL, 1.0f, c->data->GetRotation());
+			App->renderer->Blit(circle, x, y, NULL, 1.0f );
 		c = c->next;
 	}
 

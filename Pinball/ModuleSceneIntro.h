@@ -20,7 +20,8 @@ public:
 
 public:
 	p2List<PhysBody*> circles;
-	p2List<PhysBody*> paddles;
+	p2List<PhysBody*> paddlesL;
+	p2List<PhysBody*> paddlesR;
 	p2List<PhysBody*> boxes;
 	p2List<PhysBody*> ricks;
 	PhysBody* pad;
@@ -29,6 +30,7 @@ public:
 
 	SDL_Texture* circle;
 	SDL_Texture* paddle;
+	SDL_Texture* paddle2;
 	SDL_Texture* box;
 	SDL_Texture* rick;
 	uint bonus_fx;
