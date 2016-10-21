@@ -94,7 +94,28 @@ PhysBody* ModulePhysics::CreatePaddle(int x, int y, float angd, float angu)
 	b2Body* b2 = world->CreateBody(&body2);
 
 	b2PolygonShape shape2;
-	shape2.SetAsBox(PIXEL_TO_METERS(25) * 0.5f, PIXEL_TO_METERS(4) * 0.5f);
+
+	int points[16] =
+	{
+		1, 8,
+		1, 4,
+		3, 2,
+		28, 2,
+		28, 4,
+		11, 8,
+		6, 10,
+		2, 9
+	};
+
+	b2Vec2* p = new b2Vec2[8];
+
+	for (uint i = 0; i < 8; ++i)
+	{
+		p[i].x = PIXEL_TO_METERS(points[i * 2 + 0]);
+		p[i].y = PIXEL_TO_METERS(points[i * 2 + 1]);
+	}
+	shape2.Set(p, 8);
+	//shape2.SetAsBox(PIXEL_TO_METERS(25) * 0.5f, PIXEL_TO_METERS(4) * 0.5f);
 	b2FixtureDef fixture2;
 	fixture2.shape = &shape2;
 	fixture2.density = 2.0f;
