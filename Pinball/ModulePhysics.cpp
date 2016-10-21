@@ -273,7 +273,7 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius)
 	b2BodyDef body;
 	body.type = b2_dynamicBody;
 	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
-
+	body.bullet = true;
 	b2Body* b = world->CreateBody(&body);
 
 	b2CircleShape shape;
