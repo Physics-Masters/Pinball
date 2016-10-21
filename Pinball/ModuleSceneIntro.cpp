@@ -35,7 +35,7 @@ bool ModuleSceneIntro::Start()
 	
 	//LEFT PADDLES
 	paddles.add(App->physics->CreatePaddle(90, 385, (40 * DEGTORAD), -30 * DEGTORAD));
-	paddles.add(App->physics->CreatePaddle(32, 185, (70 * DEGTORAD), 35 * DEGTORAD));
+	paddles.add(App->physics->CreatePaddle(37, 187, (70 * DEGTORAD), 35 * DEGTORAD));
 	return ret;
 }
 
@@ -135,7 +135,7 @@ update_status ModuleSceneIntro::Update()
 		int x, y;
 		c->data->GetPosition(x, y);
 		
-		App->renderer->Blit(paddle, x+22, y+36, NULL, 1.0f, c->data->GetRotation());
+		App->renderer->Blit(paddle, x, y, NULL, 1.0f, c->data->GetRotation(),0,0);
 		c = c->next;
 	}
 

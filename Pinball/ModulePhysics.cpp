@@ -86,7 +86,7 @@ PhysBody* ModulePhysics::CreatePaddle(int x, int y, float angd, float angu)
 	pbody->body = b;
 	b->SetUserData(pbody);
 	pbody->width = pbody->height = 50;
-	//rectangle
+	//polygon
 	b2BodyDef body2;
 	body2.type = b2_dynamicBody;
 	body2.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
@@ -115,6 +115,7 @@ PhysBody* ModulePhysics::CreatePaddle(int x, int y, float angd, float angu)
 		p[i].y = PIXEL_TO_METERS(points[i * 2 + 1]);
 	}
 	shape2.Set(p, 8);
+	
 	//shape2.SetAsBox(PIXEL_TO_METERS(25) * 0.5f, PIXEL_TO_METERS(4) * 0.5f);
 	b2FixtureDef fixture2;
 	fixture2.shape = &shape2;
@@ -125,13 +126,13 @@ PhysBody* ModulePhysics::CreatePaddle(int x, int y, float angd, float angu)
 	PhysBody* pbody2 = new PhysBody();
 	pbody->body = b2;
 	b2->SetUserData(pbody2);
-	pbody->width = pbody->height = 40;
+	pbody->width = pbody->height = 0;
 	//REVOLUTION JOINT
 	b2RevoluteJointDef revoluteJointDef;
 	revoluteJointDef.bodyA = b;
 	revoluteJointDef.bodyB = b2;
 	revoluteJointDef.localAnchorA.Set(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0));
-	revoluteJointDef.localAnchorB.Set(PIXEL_TO_METERS(-13), PIXEL_TO_METERS(2.5));
+	revoluteJointDef.localAnchorB.Set(PIXEL_TO_METERS(4), PIXEL_TO_METERS(6));
 	revoluteJointDef.referenceAngle = 0;
 	revoluteJointDef.collideConnected = false;
 	revoluteJointDef.enableMotor = false;
