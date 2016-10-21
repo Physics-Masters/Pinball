@@ -20,6 +20,15 @@ enum update_status
 	UPDATE_ERROR
 };
 
+enum category_Bits
+{
+	GROUND = 0x0001,
+	LVL1 = 0x0002,
+	LVL2 = 0x0004,
+	BALL = 0x0008,
+	BOX = 0x0016
+};
+
 // Configuration -----------
 #define SCREEN_WIDTH 256
 #define SCREEN_HEIGHT 432

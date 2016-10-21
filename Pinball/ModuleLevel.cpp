@@ -26,17 +26,17 @@ bool ModuleLevel::Start()
 {
 	LOG("Loading Level");
 	bool ret = true;
-	lvl1sensor = App->physics->CreateRectangleSensor(0, SCREEN_HEIGHT / 2 -62, 40, 1);
+	lvl1sensor = App->physics->CreateRectangleSensor(0, SCREEN_HEIGHT / 2 -62, 40, 1, GROUND, GROUND|BALL);
 	lvl1sensor->listener = this;
 
 	
-	growndsensor = App->physics->CreateRectangleSensor(2, SCREEN_HEIGHT / 2 + -59, 40, 1);
+	growndsensor = App->physics->CreateRectangleSensor(2, SCREEN_HEIGHT / 2 + -59, 40, 1, LVL1, LVL1|BALL);
 	growndsensor->listener = this;
 
-	lvl1sensor2 = App->physics->CreateRectangleSensor(SCREEN_WIDTH - 30, SCREEN_HEIGHT / 2 - 14, 30, 1);
+	lvl1sensor2 = App->physics->CreateRectangleSensor(SCREEN_WIDTH - 30, SCREEN_HEIGHT / 2 - 14, 30, 1, GROUND, GROUND|BALL);
 	lvl1sensor2->listener = this;
 
-	growndsensor2 = App->physics->CreateRectangleSensor(SCREEN_WIDTH - 30, SCREEN_HEIGHT / 2 - 11, 30, 1);
+	growndsensor2 = App->physics->CreateRectangleSensor(SCREEN_WIDTH - 30, SCREEN_HEIGHT / 2 - 11, 30, 1, LVL1, LVL1|BALL);
 	growndsensor2->listener = this;
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
@@ -45,33 +45,7 @@ bool ModuleLevel::Start()
 	lvl1 = App->textures->Load("pinball/level1.png");
 	lvl2 = App->textures->Load("pinball/level2.png");
 
-	return ret;
-}
-
-// Load assets
-bool ModuleLevel::CleanUp()
-{
-	LOG("Unloading Level");
-
-	return true;
-}
-
-// Update: draw background
-update_status ModuleLevel::Update()
-{
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
-	{
-		ray_on = !ray_on;
-		ray.x = App->input->GetMouseX();
-		ray.y = App->input->GetMouseY();
-	}
-
-	App->renderer->Blit(ground, 0, 0, { (256, 432, 0, 0) }, 1.0f);
-	App->renderer->Blit(lvl1, 0, 15, { (256, 432, 0, 0) }, 1.0f);
-	App->renderer->Blit(lvl2, 0, 0, { (256, 432, 0, 0) }, 1.0f);
-	
-	
-	if (atground == true && groundchain == nullptr)
+	if (groundchain == nullptr)
 	{
 		// Pivot 0, 0
 		int background[206] = {
@@ -179,16 +153,12 @@ update_status ModuleLevel::Update()
 			149, 416,
 			149, 432
 		};
-		groundchain = App->physics->CreateChain(0, 0, background, 206);
-	}
-	else if (groundchain != nullptr && atground == false)
-	{
-		App->physics->DestroyBodys(*groundchain);
-		groundchain = nullptr;
+		groundchain = App->physics->CreateChain(0, 0, background, 206, GROUND, GROUND | BALL);
 	}
 
 
-	if (atlvl1 == true && lvl1chain == nullptr)
+
+	if (lvl1chain == nullptr)
 	{
 		int level1[130] = {
 			66, 128,
@@ -257,15 +227,11 @@ update_status ModuleLevel::Update()
 			64, 101,
 			79, 115
 		};
-		lvl1chain = App->physics->CreateChain(0, 16, level1, 130);
-	}
-	else if (lvl1chain != nullptr && atlvl1 == false)
-	{
-		App->physics->DestroyBodys(*lvl1chain);
-		lvl1chain = nullptr;
+		lvl1chain = App->physics->CreateChain(0, 16, level1, 130, LVL1, LVL1 | BALL);
 	}
 
-	if (atlvl2 == true && lvl2chain == nullptr)
+
+	if (lvl2chain == nullptr)
 	{
 		// Pivot 0, 0
 		int level2[130] = {
@@ -336,14 +302,39 @@ update_status ModuleLevel::Update()
 			79, 115
 		};
 
-		lvl1chain = App->physics->CreateChain(0, 0, level2, 130);
-	}
-	else if (lvl2chain != nullptr && atlvl2 == false)
-	{
-		App->physics->DestroyBodys(*lvl2chain);
-		lvl2chain = nullptr;
+		lvl1chain = App->physics->CreateChain(0, 0, level2, 130, LVL2, LVL2 | BALL);
 	}
 
+
+
+	return ret;
+}
+
+// Load assets
+bool ModuleLevel::CleanUp()
+{
+	LOG("Unloading Level");
+
+	return true;
+}
+
+// Update: draw background
+update_status ModuleLevel::Update()
+{
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+	{
+		ray_on = !ray_on;
+		ray.x = App->input->GetMouseX();
+		ray.y = App->input->GetMouseY();
+	}
+
+	App->renderer->Blit(ground, 0, 0, { (256, 432, 0, 0) }, 1.0f);
+	App->renderer->Blit(lvl1, 0, 15, { (256, 432, 0, 0) }, 1.0f);
+	App->renderer->Blit(lvl2, 0, 0, { (256, 432, 0, 0) }, 1.0f);
+	
+	/*
+	
+	*/
 	fVector normal(0.0f, 0.0f);
 
 	

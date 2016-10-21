@@ -23,7 +23,6 @@ public:
 	p2List<PhysBody*> paddlesL;
 	p2List<PhysBody*> paddlesR;
 	p2List<PhysBody*> boxes;
-	p2List<PhysBody*> ricks;
 	PhysBody* pad;
 	
 	bool sensed;
@@ -32,7 +31,6 @@ public:
 	SDL_Texture* paddle;
 	SDL_Texture* paddle2;
 	SDL_Texture* box;
-	SDL_Texture* rick;
 	uint bonus_fx;
 	p2Point<int> ray;
 	bool ray_on;
