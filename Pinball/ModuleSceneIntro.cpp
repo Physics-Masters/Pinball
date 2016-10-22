@@ -99,14 +99,14 @@ update_status ModuleSceneIntro::Update()
 
 	// All draw functions ------------------------------------------------------
 	p2List_item<PhysBody*>* c = paddlesL.getFirst();
-	while (c != NULL)
+	/*while (c != NULL)
 	{
 		int x, y;
 		c->data->GetPosition(x, y);
 		
 		App->renderer->Blit(paddle, x-1, y, NULL, 1.0f, c->data->GetRotation(),0,0);
 		c = c->next;
-	}
+	}*/
 	 c = paddlesR.getFirst();
 	 while (c != NULL)
 	 {

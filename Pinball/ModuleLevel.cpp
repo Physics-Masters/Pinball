@@ -455,6 +455,15 @@ update_status ModuleLevel::Update()
 		}
 		c = c->next;
 	}
+	c = App->scene_intro->paddlesL.getFirst();
+	while (c != NULL)
+	{
+		int x, y;
+		c->data->GetPosition(x, y);
+
+		App->renderer->Blit(App->scene_intro->paddle, x - 1, y, NULL, 1.0f, c->data->GetRotation(), 0, 0);
+		c = c->next;
+	}
 
 	//render lvl 1
 	App->renderer->Blit(lvl1, 0, 15, { (256, 432, 0, 0) }, 1.0f);
