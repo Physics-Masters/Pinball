@@ -77,6 +77,13 @@ bool ModuleLevel::Start()
 	ground = App->textures->Load("pinball/background.png");
 	lvl1 = App->textures->Load("pinball/level1.png");
 	lvl2 = App->textures->Load("pinball/level2.png");
+	Tri = App->textures->Load("pinball/triangles.png");
+	LeftTriAnim.PushBack({ 0,0,21,40 });
+	LeftTriAnim.PushBack({ 21,0,21,40 });
+	LeftTriAnim.speed = 0.05;
+	RightTriAnim.PushBack({ 42,0,21,40 });
+	RightTriAnim.PushBack({ 63,0,21,40 });
+	RightTriAnim.speed = 0.05;
 
 		int background[202] = {
 			92, 432,
@@ -281,12 +288,26 @@ bool ModuleLevel::Start()
 			208, 360,
 			208, 322
 		};
+		int leftTri[8] = {
+			57, 318,
+			57, 341,
+			75, 350,
+			58, 313
+		};
+		int rightTri[8] = {
+			165, 351,
+			183, 342,
+			182, 313,
+			164, 349
+		};
 
 		groundchains.add(App->physics->CreateChain(0, 0, groundtolvl1, 32, GROUND, GROUND | BALL));
 		groundchains.add(App->physics->CreateChain(0, 0, groundcircle, 30, GROUND, GROUND | BALL));
 		groundchains.add(App->physics->CreateChain(0, 0, groundcircle1, 56, GROUND, GROUND | BALL));
 		groundchains.add(App->physics->CreateChain(0, -1, groundleft, 26, GROUND, GROUND | BALL));
 		groundchains.add(App->physics->CreateChain(0, -1, groundright, 24, GROUND, GROUND | BALL));
+		groundchains.add(App->physics->CreateChain(0, 4, leftTri, 8, GROUND, GROUND | BALL));
+		groundchains.add(App->physics->CreateChain(0, 4, rightTri, 8, GROUND, GROUND | BALL));
 
 		int level1[132] = {
 			70, 140,
@@ -441,6 +462,8 @@ update_status ModuleLevel::Update()
 	
 	// render ground
 	App->renderer->Blit(ground, 0, 0, { (256, 432, 0, 0) }, 1.0f);
+	App->renderer->Blit(Tri, 57, 316, &(LeftTriAnim.GetCurrentFrame()), 1.0f);
+	App->renderer->Blit(Tri, 163, 316, &(RightTriAnim.GetCurrentFrame()), 1.0f);
 	// render all balls at background
 	c = App->scene_intro->circles.getFirst();
 	while (c != NULL)

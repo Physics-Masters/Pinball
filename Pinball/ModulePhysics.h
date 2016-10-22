@@ -2,6 +2,7 @@
 #include "Module.h"
 #include "ModuleSceneIntro.h"
 #include "Globals.h"
+#include "Animation.h"
 #include "Box2D/Box2D/Box2D.h"
 
 #define GRAVITY_X 0.0f

@@ -136,7 +136,7 @@ PhysBody* ModulePhysics::CreatePaddleL(int x, int y, float angd, float angu, uin
 	revoluteJointDef.referenceAngle = 0;
 	revoluteJointDef.collideConnected = false;
 	revoluteJointDef.enableMotor = false;
-	revoluteJointDef.maxMotorTorque = 1000;
+	revoluteJointDef.maxMotorTorque = 1800;
 	revoluteJointDef.motorSpeed = -1500 * DEGTORAD;
 	revoluteJointDef.enableLimit = true;
 	revoluteJointDef.lowerAngle = angu;

@@ -3,6 +3,7 @@
 #include "p2List.h"
 #include "p2Point.h"
 #include "Globals.h"
+#include "Animation.h"
 
 class PhysBody;
 
@@ -37,6 +38,10 @@ public:
 	bool atground;
 	bool atlvl1;
 	bool atlvl2;
+	//Animations
+	Animation LeftTriAnim;
+	Animation RightTriAnim;
+	SDL_Texture* Tri;
 
 	SDL_Texture* ground;
 	SDL_Texture* lvl1;
