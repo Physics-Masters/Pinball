@@ -36,9 +36,10 @@ Application::Application()
 	AddModule(renderer);
 	AddModule(textures);
 	AddModule(level);
+	AddModule(sensors);
 	AddModule(input);
 	AddModule(audio);
-	AddModule(sensors);
+	
 	
 	// Scenes
 	AddModule(scene_intro);

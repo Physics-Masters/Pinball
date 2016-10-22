@@ -79,6 +79,13 @@ bool ModuleLevel::Start()
 	lvl1 = App->textures->Load("pinball/level1.png");
 	lvl2 = App->textures->Load("pinball/level2.png");
 	Tri = App->textures->Load("pinball/triangles.png");
+	LightsS = App->textures->Load("pinball/lights.png");
+	LightsAnim.PushBack({ 0,0,222,152 });
+	LightsAnim.PushBack({ 222,0,222,152 });
+	LightsAnim.PushBack({ 0,153,222,152 });
+	LightsAnim.PushBack({ 222,153,222,152 });
+	LightsAnim.PushBack({ 0,305,222,152 });
+	LightsAnim.speed = 0.02;
 	LeftTriAnim.PushBack({ 0,0,21,40 });
 	LeftTriAnim.PushBack({ 21,0,21,40 });
 	LeftTriAnim.speed = 0.05;
@@ -465,6 +472,7 @@ update_status ModuleLevel::Update()
 	App->renderer->Blit(ground, 0, 0, { (256, 432, 0, 0) }, 1.0f);
 	App->renderer->Blit(Tri, 57, 316, &(LeftTriAnim.GetCurrentFrame()), 1.0f);
 	App->renderer->Blit(Tri, 163, 316, &(RightTriAnim.GetCurrentFrame()), 1.0f);
+	App->renderer->Blit(LightsS, 14, 105, &(LightsAnim.GetCurrentFrame()), 1.0f);
 	// render all balls at background
 	c = App->scene_intro->circles.getFirst();
 	while (c != NULL)

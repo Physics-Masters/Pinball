@@ -280,7 +280,7 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, uint16 categoryb
 	shape.m_radius = PIXEL_TO_METERS(radius);
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
-	fixture.density = 5.0f;
+	fixture.density = 1.0f;
 	fixture.filter.categoryBits = categorybits;
 	fixture.filter.maskBits = maskbits;
 

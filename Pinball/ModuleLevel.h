@@ -41,8 +41,10 @@ public:
 	//Animations
 	Animation LeftTriAnim;
 	Animation RightTriAnim;
-	SDL_Texture* Tri;
+	Animation LightsAnim;
 
+	SDL_Texture* LightsS;
+	SDL_Texture* Tri;
 	SDL_Texture* ground;
 	SDL_Texture* lvl1;
 	SDL_Texture* lvl2;

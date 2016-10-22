@@ -14,13 +14,7 @@ ModuleSensors::~ModuleSensors()
 {}
 bool ModuleSensors::Start()
 {
-	LightsS = App->textures->Load("pinball/lights.png");
-	LightsAnim.PushBack({ 0,0,222,152 });
-	LightsAnim.PushBack({ 222,0,222,152 });
-	LightsAnim.PushBack({ 0,153,222,152 });
-	LightsAnim.PushBack({ 222,153,222,152 });
-	LightsAnim.PushBack({ 0,305,222,152 });
-	LightsAnim.speed = 0.02;
+	
 
 	int SLT[8] = {
 		58, 314,
@@ -42,7 +36,7 @@ bool ModuleSensors::Start()
 }
 update_status ModuleSensors::Update()
 {
-	App->renderer->Blit(LightsS, 14, 105, &(LightsAnim.GetCurrentFrame()), 1.0f);
+	
 	return UPDATE_CONTINUE;
 }
 bool ModuleSensors::CleanUp()
