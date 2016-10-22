@@ -30,6 +30,8 @@ bool ModuleLevel::Start()
 	LOG("Loading Level");
 	bool ret = true;
 
+	
+
 	int slvl[12] = {
 		68, 134,
 		67, 138,
@@ -47,11 +49,11 @@ bool ModuleLevel::Start()
 	lvl2sensor1->listener = this;
 	
 	//rampa metall pujada
-	lvl1sensor = App->physics->CreatePolySensor(-10, -10, slvl, 12, GROUND, GROUND | BALL);
+	lvl1sensor = App->physics->CreatePolySensor(-5, -5, slvl, 12, GROUND, GROUND | BALL);
 	lvl1sensor->listener = this;
 
 	//rampa metall baixada
-	lvl1growndsensor0 = App->physics->CreatePolySensor(0, 0, slvl, 12, LVL1, LVL1|BALL);
+	lvl1growndsensor0 = App->physics->CreatePolySensor(10, 10, slvl, 12, LVL1, LVL1|BALL);
 	lvl1growndsensor0->listener = this;
 
 	lvl2growndsensor0 = App->physics->CreatePolySensor(-55, 50, slvl, 12, LVL2, LVL2 | BALL);
@@ -351,8 +353,10 @@ update_status ModuleLevel::Update()
 		}
 		c = c->next;
 	}
-	c = App->scene_intro->circles.getFirst();
+
 	App->renderer->Blit(lvl1, 0, 15, { (256, 432, 0, 0) }, 1.0f);
+
+	c = App->scene_intro->circles.getFirst();
 	while (c != NULL)
 	{
 
@@ -365,8 +369,10 @@ update_status ModuleLevel::Update()
 		}
 		c = c->next;
 	}
-	c = App->scene_intro->circles.getFirst();
+
 	App->renderer->Blit(lvl2, 0, 0, { (256, 432, 0, 0) }, 1.0f);
+
+	c = App->scene_intro->circles.getFirst();
 	while (c != NULL)
 	{
 
@@ -379,7 +385,7 @@ update_status ModuleLevel::Update()
 		}
 		c = c->next;
 	}
-
+	/*
 	if (atground == true)
 	{
 		b2Filter ball;
@@ -387,7 +393,6 @@ update_status ModuleLevel::Update()
 		ball.maskBits = GROUND|BALL;
 		App->scene_intro->circles.getLast()->data->body->GetFixtureList()->SetFilterData(ball);
 		atground = false;
-		pground = true;
 	}
 	if (atlvl1 == true)
 	{
@@ -396,10 +401,6 @@ update_status ModuleLevel::Update()
 		ball.maskBits = LVL1 | BALL;
 		App->scene_intro->circles.getLast()->data->body->GetFixtureList()->SetFilterData(ball);
 		atlvl1 = false;
-
-		plvl1 = true;
-		pground = false;
-		plvl2 = false;
 	}
 	if (atlvl2 == true)
 	{
@@ -408,11 +409,7 @@ update_status ModuleLevel::Update()
 		ball.maskBits = LVL2 | BALL;
 		App->scene_intro->circles.getLast()->data->body->GetFixtureList()->SetFilterData(ball);
 		atlvl2 = false;
-
-		plvl2 = true;
-		plvl1 = false;
-		pground = false;
-	}
+	}*/
 	fVector normal(0.0f, 0.0f);
 	
 	return UPDATE_CONTINUE;
@@ -423,24 +420,42 @@ void ModuleLevel::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
 	if (bodyA->body != nullptr && bodyB->body != nullptr)
 	{
-		if (bodyA->body->GetType() == b2Shape::e_circle )
+		if (bodyA->body->GetType() == b2_dynamicBody && bodyB->body->GetFixtureList()->IsSensor() == true)
 		{
-			if (bodyB == lvl1sensor)
+			p2List_item<PhysBody*>* c = App->scene_intro->circles.getFirst();
+			b2Filter balllvl;
+			balllvl.categoryBits = bodyA->body->GetFixtureList()->GetFilterData().categoryBits;
+			balllvl.maskBits = bodyA->body->GetFixtureList()->GetFilterData().maskBits;
+			while (c != NULL)
 			{
-				atlvl1 = true;
-				LOG("bodyB at lvl 1");
+				if (c->data->body == bodyA->body)
+				{
+					if (bodyB == lvl1sensor)
+					{
+						//atlvl1 = true;
+						balllvl.categoryBits = LVL1;
+						balllvl.maskBits = LVL1 | BALL;
+						LOG("bodyA at lvl 1");
+						//atlvl1 = false;
+					}
+					if (bodyB == lvl2sensor0 || bodyB == lvl2sensor1)
+					{
+						//atlvl2 = true;
+						balllvl.categoryBits = LVL2;
+						balllvl.maskBits = LVL2 | BALL;
+						LOG("BodyA at lvl 2");
+					}
+					if (bodyB == lvl1growndsensor0 || bodyB == lvl1growndsensor1 || bodyB == lvl2growndsensor0 || bodyB == lvl2growndsensor1 || bodyB == lvl2growndsensor2)
+					{
+						//atground = true;
+						balllvl.categoryBits = GROUND;
+						balllvl.maskBits = GROUND | BALL;
+						LOG("bodyA at lvl 1");
+					}
+					c->data->body->GetFixtureList()->SetFilterData(balllvl);
+				}
+				c = c->next;
 			}
-			if (bodyB == lvl2sensor0 || bodyB == lvl2sensor1)
-			{
-				atlvl2 = true;
-				LOG("Body at lvl 2")
-			}
-			if (bodyB == lvl1growndsensor0|| bodyB == lvl1growndsensor1 || bodyB == lvl2growndsensor0 || bodyB == lvl2growndsensor1 || bodyB == lvl2growndsensor2)
-			{
-				atground = true;
-				LOG("bodyB at lvl 1");
-			}
-
 		}
 	}
 }

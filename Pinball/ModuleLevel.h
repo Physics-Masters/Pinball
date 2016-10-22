@@ -31,7 +31,7 @@ public:
 	PhysBody* lvl2sensor0;
 	PhysBody* lvl2sensor1;
 	PhysBody* lvl2sensor2;
-	
+
 	bool atground;
 	bool atlvl1;
 	bool atlvl2;
