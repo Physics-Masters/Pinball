@@ -31,13 +31,12 @@ public:
 	PhysBody* lvl2sensor0;
 	PhysBody* lvl2sensor1;
 	PhysBody* lvl2sensor2;
+	
+	p2List<PhysBody*> groundchains;
 
 	bool atground;
 	bool atlvl1;
 	bool atlvl2;
-	bool pground;
-	bool plvl1;
-	bool plvl2;
 
 	SDL_Texture* ground;
 	SDL_Texture* lvl1;

@@ -34,9 +34,9 @@ bool ModuleSceneIntro::Start()
 	
 	
 	//LEFT PADDLES
-	paddlesL.add(App->physics->CreatePaddleL(90, 385, (40 * DEGTORAD), -30 * DEGTORAD, GROUND, GROUND|BALL));
-	paddlesL.add(App->physics->CreatePaddleL(37, 187, (70 * DEGTORAD), 35 * DEGTORAD, GROUND, GROUND | BALL));
-	paddlesR.add(App->physics->CreatePaddleR(150, 385, (146 * DEGTORAD), 78 * DEGTORAD, GROUND, GROUND | BALL));
+	paddlesL.add(App->physics->CreatePaddleL(90, 387, (40 * DEGTORAD), -30 * DEGTORAD, GROUND, GROUND|BALL));
+	paddlesL.add(App->physics->CreatePaddleL(32, 185, (70 * DEGTORAD), 35 * DEGTORAD, GROUND, GROUND | BALL));
+	paddlesR.add(App->physics->CreatePaddleR(150, 387, (146 * DEGTORAD), 78 * DEGTORAD, GROUND, GROUND | BALL));
 	paddlesR.add(App->physics->CreatePaddleR(222, 258, (100 * DEGTORAD), 40 * DEGTORAD, GROUND, GROUND | BALL));
 	return ret;
 }
