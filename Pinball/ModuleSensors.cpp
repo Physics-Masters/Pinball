@@ -1,6 +1,7 @@
-#include "ModuleSensors.h"
+
 #include "Application.h"
 #include "ModuleRender.h"
+#include "ModuleSensors.h"
 #include "ModuleInput.h"
 #include "ModuleTextures.h"
 #include "ModuleAudio.h"
@@ -13,6 +14,14 @@ ModuleSensors::~ModuleSensors()
 {}
 bool ModuleSensors::Start()
 {
+	LightsS = App->textures->Load("pinball/lights.png");
+	LightsAnim.PushBack({ 0,0,222,152 });
+	LightsAnim.PushBack({ 222,0,222,152 });
+	LightsAnim.PushBack({ 0,153,222,152 });
+	LightsAnim.PushBack({ 222,153,222,152 });
+	LightsAnim.PushBack({ 0,305,222,152 });
+	LightsAnim.speed = 0.02;
+
 	int SLT[8] = {
 		58, 314,
 		75, 354,
@@ -31,13 +40,14 @@ bool ModuleSensors::Start()
 	RTriBounce->body->GetFixtureList()->SetRestitution(1);
 	return true;
 }
+update_status ModuleSensors::Update()
+{
+	App->renderer->Blit(LightsS, 14, 105, &(LightsAnim.GetCurrentFrame()), 1.0f);
+	return UPDATE_CONTINUE;
+}
 bool ModuleSensors::CleanUp()
 {
 	LOG("Unloading Sensors");
 
 	return true;
-}
-update_status ModuleSensors::Update()
-{
-	return UPDATE_CONTINUE;
 }

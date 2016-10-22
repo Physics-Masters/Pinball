@@ -19,4 +19,6 @@ public:
 public:
 	PhysBody* LTriBounce;
 	PhysBody* RTriBounce;
+	Animation LightsAnim;
+	SDL_Texture* LightsS;
 };
