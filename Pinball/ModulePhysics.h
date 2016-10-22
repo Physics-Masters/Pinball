@@ -45,6 +45,7 @@ public:
 	bool CleanUp();
 
 	PhysBody* CreateCircle(int x, int y, int radius, uint16 categorybits, uint16 maskbits);
+	PhysBody* StartGame( uint16 categorybits, uint16 maskbits);
 	PhysBody* CreateRectangle(int x, int y, int width, int height, uint16 categorybits, uint16 maskbits);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, uint16 categorybits, uint16 maskbits);
 	PhysBody* CreatePolySensor(int x, int y, int* points, int size, uint16 categorybits, uint16 maskbits);

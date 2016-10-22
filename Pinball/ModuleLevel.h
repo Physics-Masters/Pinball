@@ -20,6 +20,7 @@ public:
 
 
 public:
+	p2List<PhysBody*> circles;
 	PhysBody* groundchain;
 	PhysBody* lvl1chain;
 	PhysBody* lvl2chain;
