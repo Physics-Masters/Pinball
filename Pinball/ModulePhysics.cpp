@@ -136,8 +136,8 @@ PhysBody* ModulePhysics::CreatePaddleL(int x, int y, float angd, float angu, uin
 	revoluteJointDef.referenceAngle = 0;
 	revoluteJointDef.collideConnected = false;
 	revoluteJointDef.enableMotor = false;
-	revoluteJointDef.maxMotorTorque = 500;
-	revoluteJointDef.motorSpeed = -1000 * DEGTORAD;
+	revoluteJointDef.maxMotorTorque = 1000;
+	revoluteJointDef.motorSpeed = -1500 * DEGTORAD;
 	revoluteJointDef.enableLimit = true;
 	revoluteJointDef.lowerAngle = angu;
 	revoluteJointDef.upperAngle = angd;
@@ -215,8 +215,8 @@ PhysBody* ModulePhysics::CreatePaddleR(int x, int y, float angd, float angu, uin
 	revoluteJointDef.referenceAngle = -120 * DEGTORAD;
 	revoluteJointDef.collideConnected = false;
 	revoluteJointDef.enableMotor = false;
-	revoluteJointDef.maxMotorTorque = 500;
-	revoluteJointDef.motorSpeed = 1000 * DEGTORAD;
+	revoluteJointDef.maxMotorTorque = 1800;
+	revoluteJointDef.motorSpeed = 1500 * DEGTORAD;
 	revoluteJointDef.enableLimit = true;
 	revoluteJointDef.lowerAngle = angu;
 	revoluteJointDef.upperAngle = angd;
@@ -280,7 +280,7 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, uint16 categoryb
 	shape.m_radius = PIXEL_TO_METERS(radius);
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
-	fixture.density = 2.0f;
+	fixture.density = 0.5f;
 	fixture.filter.categoryBits = categorybits;
 	fixture.filter.maskBits = maskbits;
 
