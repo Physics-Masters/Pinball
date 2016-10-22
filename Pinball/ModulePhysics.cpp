@@ -280,7 +280,7 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, uint16 categoryb
 	shape.m_radius = PIXEL_TO_METERS(radius);
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
-	fixture.density = 0.5f;
+	fixture.density = 5.0f;
 	fixture.filter.categoryBits = categorybits;
 	fixture.filter.maskBits = maskbits;
 
@@ -375,7 +375,6 @@ PhysBody* ModulePhysics::CreatePolySensor(int x, int y, int* points, int size, u
 	fixture.isSensor = true;
 	fixture.filter.categoryBits = categorybits;
 	fixture.filter.maskBits = maskbits;
-
 	b->CreateFixture(&fixture);
 
 	PhysBody* pbody = new PhysBody();
