@@ -79,7 +79,7 @@ update_status ModuleSceneIntro::Update()
 	}
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
-		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 7, BALL, BALL|GROUND));
+		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 7, GROUND, BALL|GROUND));
 		circles.getLast()->data->listener = App->level;
 	}
 
@@ -116,7 +116,7 @@ update_status ModuleSceneIntro::Update()
 		 App->renderer->Blit(paddle2, x, y, NULL, 1.0f, c->data->GetRotation(), 0, 0);
 		 c = c->next;
 	 }
-	 c = circles.getFirst();
+	/* c = circles.getFirst();
 
 	while(c != NULL)
 	{
@@ -126,7 +126,7 @@ update_status ModuleSceneIntro::Update()
 			App->renderer->Blit(circle, x, y, NULL, 1.0f );
 		c = c->next;
 	}
-
+	*/
 	c = boxes.getFirst();
 
 	while(c != NULL)

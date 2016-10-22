@@ -12,9 +12,12 @@ ModuleLevel::ModuleLevel(Application* app, bool start_enabled) : Module(app, sta
 {	
 	ground = lvl1 = lvl2 = NULL;
 	ray_on = false;
-	atground = true;
+	atground = false;
 	atlvl1 = false;
 	atlvl2 = false;
+	pground = true;
+	plvl1 = false;
+	plvl2 = false;
 
 }
 
@@ -26,18 +29,51 @@ bool ModuleLevel::Start()
 {
 	LOG("Loading Level");
 	bool ret = true;
-	lvl1sensor = App->physics->CreateRectangleSensor(0, SCREEN_HEIGHT / 2 -62, 40, 1, GROUND, GROUND|BALL);
+
+	int slvl[12] = {
+		68, 134,
+		67, 138,
+		71, 138,
+		74, 135,
+		74, 131,
+		70, 132
+	};
+		
+	//rampa esquerra pujada
+	lvl2sensor0 = App->physics->CreatePolySensor(-62, 30, slvl, 12, GROUND, GROUND|BALL);
+	lvl2sensor0->listener = this;
+	//rampa dreta pujada
+	lvl2sensor1 = App->physics->CreatePolySensor(168, 30, slvl, 12, GROUND, GROUND | BALL);
+	lvl2sensor1->listener = this;
+	
+	//rampa metall pujada
+	lvl1sensor = App->physics->CreatePolySensor(-10, -10, slvl, 12, GROUND, GROUND | BALL);
 	lvl1sensor->listener = this;
 
+	//rampa metall baixada
+	lvl1growndsensor0 = App->physics->CreatePolySensor(0, 0, slvl, 12, LVL1, LVL1|BALL);
+	lvl1growndsensor0->listener = this;
+
+	lvl2growndsensor0 = App->physics->CreatePolySensor(-55, 50, slvl, 12, LVL2, LVL2 | BALL);
+	lvl2growndsensor0->listener = this;
 	
-	growndsensor = App->physics->CreateRectangleSensor(2, SCREEN_HEIGHT / 2 + -59, 40, 1, LVL1, LVL1|BALL);
-	growndsensor->listener = this;
-
-	lvl1sensor2 = App->physics->CreateRectangleSensor(SCREEN_WIDTH - 30, SCREEN_HEIGHT / 2 - 14, 30, 1, GROUND, GROUND|BALL);
-	lvl1sensor2->listener = this;
-
-	growndsensor2 = App->physics->CreateRectangleSensor(SCREEN_WIDTH - 30, SCREEN_HEIGHT / 2 - 11, 30, 1, LVL1, LVL1|BALL);
-	growndsensor2->listener = this;
+	lvl2growndsensor1 = App->physics->CreatePolySensor(163, 50, slvl, 12, LVL2, LVL2 | BALL);
+	lvl2growndsensor1->listener = this;
+	
+	lvl2growndsensor2 = App->physics->CreatePolySensor(122, -85, slvl, 12, LVL2, LVL2 | BALL);
+	lvl2growndsensor2->listener = this;
+	
+	int elvl1[12] = {
+		40, 311,
+		45, 308,
+		51, 312,
+		51, 310,
+		45, 306,
+		40, 309
+	};
+	//rampa metall forat
+	lvl1growndsensor1 = App->physics->CreatePolySensor(0, 18, elvl1, 12, LVL1, LVL1|BALL);
+	lvl1growndsensor1->listener = this;
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
@@ -45,10 +81,7 @@ bool ModuleLevel::Start()
 	lvl1 = App->textures->Load("pinball/level1.png");
 	lvl2 = App->textures->Load("pinball/level2.png");
 
-	if (groundchain == nullptr)
-	{
-		// Pivot 0, 0
-		int background[206] = {
+		int background[202] = {
 			92, 432,
 			92, 416,
 			32, 386,
@@ -66,11 +99,12 @@ bool ModuleLevel::Start()
 			20, 236,
 			25, 235,
 			26, 228,
-			12, 207,
-			-13, 133,
-			11, 132,
-			29, 196,
-			33, 208,
+			13, 208,
+			0, 169, 
+			-5, 132,
+			15, 144,
+			21, 175,
+			32, 204, 
 			37, 210,
 			38, 204,
 			30, 184,
@@ -118,19 +152,16 @@ bool ModuleLevel::Start()
 			247, 97,
 			237, 124,
 			232, 135,
-			220, 191,
-			210, 192,
-			207, 207,
-			217, 206,
+			219, 190,
+			212, 192,
+			208, 205, 
+			215, 202, 
 			219, 195,
-			225, 174,
-			234, 134,
-			242, 126,
-			252, 127,
-			253, 137,
-			251, 159,
-			246, 181,
-			238, 204,
+			226, 176,
+			233, 146,
+			251, 149, 
+			245, 179,
+			235, 208,
 			234, 211,
 			230, 219,
 			240, 209,
@@ -153,15 +184,11 @@ bool ModuleLevel::Start()
 			149, 416,
 			149, 432
 		};
-		groundchain = App->physics->CreateChain(0, 0, background, 206, GROUND, GROUND | BALL);
-	}
-
-
-
-	if (lvl1chain == nullptr)
-	{
-		int level1[130] = {
-			66, 128,
+		groundchain = App->physics->CreateChain(0, 0, background, 202, GROUND, GROUND | BALL);
+	
+		int level1[132] = {
+			70, 138,
+			68, 128,
 			46, 107,
 			33, 91,
 			30, 80,
@@ -225,88 +252,69 @@ bool ModuleLevel::Start()
 			48, 73,
 			51, 86,
 			64, 101,
-			79, 115
+			94, 130
 		};
-		lvl1chain = App->physics->CreateChain(0, 16, level1, 130, LVL1, LVL1 | BALL);
-	}
-
-
-	if (lvl2chain == nullptr)
-	{
-		// Pivot 0, 0
-		int level2[130] = {
-			66, 128,
-			46, 107,
-			33, 91,
-			30, 80,
-			30, 59,
-			32, 41,
-			37, 27,
-			50, 14,
-			61, 8,
-			79, 2,
-			95, 0,
-			125, 6,
-			132, 8,
-			140, 13,
-			144, 22,
-			150, 35,
-			152, 51,
-			152, 72,
-			148, 90,
-			141, 108,
-			134, 119,
-			114, 138,
-			32, 178,
-			24, 185,
-			18, 192,
-			18, 252,
-			20, 256,
-			25, 259,
-			45, 268,
-			51, 275,
-			53, 283,
-			53, 296,
-			56, 303,
-			55, 310,
-			48, 313,
-			41, 313,
-			35, 309,
-			35, 302,
-			37, 297,
-			37, 290,
-			35, 284,
-			22, 277,
-			8, 270,
-			0, 262,
-			0, 189,
-			4, 179,
-			17, 168,
-			104, 125,
-			122, 106,
-			130, 88,
-			134, 73,
-			133, 41,
-			128, 32,
-			121, 27,
-			113, 22,
-			99, 18,
-			82, 18,
-			67, 22,
-			56, 32,
-			49, 48,
-			48, 60,
-			48, 73,
-			51, 86,
-			64, 101,
-			79, 115
+		lvl1chain = App->physics->CreateChain(0, 16, level1, 132, LVL1, LVL1 | BALL);
+	
+	
+		int level2[108] = {
+			32, 204,
+			21, 175,
+			15, 144, 
+			11, 107,
+			11, 81,
+			17, 61,
+			28, 45,
+			40, 34,
+			58, 26,
+			84, 20,
+			113, 18,
+			146, 19,
+			157, 22,
+			169, 28,
+			179, 39,
+			182, 44,
+			190, 67, 
+			208, 64,
+			203, 46,
+			193, 28,
+			205, 32,
+			215, 39,
+			226, 52,
+			232, 64,
+			236, 80,
+			237, 99,
+			236, 122,
+			233, 146, 
+			226, 176,
+			219, 195,
+			215, 202,
+			235, 208, 
+			245, 179,
+			251, 149, 
+			253, 118,
+			253, 73,
+			250, 59,
+			241, 41,
+			226, 25,
+			205, 13,
+			168, 3,
+			150, 0,
+			124, -1,
+			93, 1,
+			59, 8,
+			38, 15,
+			19, 27,
+			5, 43,
+			-2, 60,
+			-5, 77,
+			-7, 104,
+			-5, 132,
+			0, 169, 
+			13, 208
 		};
-
-		lvl1chain = App->physics->CreateChain(0, 0, level2, 130, LVL2, LVL2 | BALL);
-	}
-
-
-
+		lvl1chain = App->physics->CreateChain(0, 0, level2, 108, LVL2, LVL2 | BALL);
+	
 	return ret;
 }
 
@@ -314,7 +322,7 @@ bool ModuleLevel::Start()
 bool ModuleLevel::CleanUp()
 {
 	LOG("Unloading Level");
-
+	
 	return true;
 }
 
@@ -327,16 +335,85 @@ update_status ModuleLevel::Update()
 		ray.x = App->input->GetMouseX();
 		ray.y = App->input->GetMouseY();
 	}
+	p2List_item<PhysBody*>* c;
+	c = App->scene_intro->circles.getFirst();
 
 	App->renderer->Blit(ground, 0, 0, { (256, 432, 0, 0) }, 1.0f);
-	App->renderer->Blit(lvl1, 0, 15, { (256, 432, 0, 0) }, 1.0f);
-	App->renderer->Blit(lvl2, 0, 0, { (256, 432, 0, 0) }, 1.0f);
-	
-	/*
-	
-	*/
-	fVector normal(0.0f, 0.0f);
+	while (c != NULL)
+	{
 
+		int x, y;
+		c->data->GetPosition(x, y);
+		
+		if (c->data->body->GetFixtureList()->GetFilterData().categoryBits == GROUND)
+		{
+			App->renderer->Blit(App->scene_intro->circle, x, y, NULL, 1.0f);
+		}
+		c = c->next;
+	}
+	c = App->scene_intro->circles.getFirst();
+	App->renderer->Blit(lvl1, 0, 15, { (256, 432, 0, 0) }, 1.0f);
+	while (c != NULL)
+	{
+
+		int x, y;
+		c->data->GetPosition(x, y);
+
+		if (c->data->body->GetFixtureList()->GetFilterData().categoryBits == LVL1)
+		{
+			App->renderer->Blit(App->scene_intro->circle, x, y, NULL, 1.0f);
+		}
+		c = c->next;
+	}
+	c = App->scene_intro->circles.getFirst();
+	App->renderer->Blit(lvl2, 0, 0, { (256, 432, 0, 0) }, 1.0f);
+	while (c != NULL)
+	{
+
+		int x, y;
+		c->data->GetPosition(x, y);
+
+		if (c->data->body->GetFixtureList()->GetFilterData().categoryBits == LVL2)
+		{
+			App->renderer->Blit(App->scene_intro->circle, x, y, NULL, 1.0f);
+		}
+		c = c->next;
+	}
+
+	if (atground == true)
+	{
+		b2Filter ball;
+		ball.categoryBits = GROUND;
+		ball.maskBits = GROUND|BALL;
+		App->scene_intro->circles.getLast()->data->body->GetFixtureList()->SetFilterData(ball);
+		atground = false;
+		pground = true;
+	}
+	if (atlvl1 == true)
+	{
+		b2Filter ball;
+		ball.categoryBits = LVL1;
+		ball.maskBits = LVL1 | BALL;
+		App->scene_intro->circles.getLast()->data->body->GetFixtureList()->SetFilterData(ball);
+		atlvl1 = false;
+
+		plvl1 = true;
+		pground = false;
+		plvl2 = false;
+	}
+	if (atlvl2 == true)
+	{
+		b2Filter ball;
+		ball.categoryBits = LVL2;
+		ball.maskBits = LVL2 | BALL;
+		App->scene_intro->circles.getLast()->data->body->GetFixtureList()->SetFilterData(ball);
+		atlvl2 = false;
+
+		plvl2 = true;
+		plvl1 = false;
+		pground = false;
+	}
+	fVector normal(0.0f, 0.0f);
 	
 	return UPDATE_CONTINUE;
 }
@@ -346,26 +423,24 @@ void ModuleLevel::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
 	if (bodyA->body != nullptr && bodyB->body != nullptr)
 	{
-		if (bodyB->body->GetType() == b2Shape::e_circle || bodyA->body->GetType() == b2Shape::e_circle)
+		if (bodyA->body->GetType() == b2Shape::e_circle )
 		{
-			if (bodyA == lvl1sensor || bodyB == lvl1sensor || bodyA == lvl1sensor2 || bodyB == lvl1sensor2)
+			if (bodyB == lvl1sensor)
 			{
-				if (atground == true)
-				{
-					atground = false;
-					atlvl1 = true;
-					LOG("AT LVL 1, %d g, %d l1", atground, atlvl1)
-				}
+				atlvl1 = true;
+				LOG("bodyB at lvl 1");
 			}
-			if (bodyA == growndsensor || bodyB == growndsensor || bodyA == growndsensor2 || bodyB == growndsensor2)
+			if (bodyB == lvl2sensor0 || bodyB == lvl2sensor1)
 			{
-				if (atground == false)
-				{
-					atground = true;
-					atlvl1 = false;
-					LOG("AT background, %d g, %d lvl1", atground, atlvl1)
-				}
+				atlvl2 = true;
+				LOG("Body at lvl 2")
 			}
+			if (bodyB == lvl1growndsensor0|| bodyB == lvl1growndsensor1 || bodyB == lvl2growndsensor0 || bodyB == lvl2growndsensor1 || bodyB == lvl2growndsensor2)
+			{
+				atground = true;
+				LOG("bodyB at lvl 1");
+			}
+
 		}
 	}
 }
