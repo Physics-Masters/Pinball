@@ -2,13 +2,11 @@
 #include "Application.h"
 #include "ModuleRender.h"
 #include "ModuleSceneIntro.h"
-#include"ModuleSensors.h"
 #include "ModuleLevel.h"
 #include "ModuleInput.h"
 #include "ModuleTextures.h"
 #include "ModuleAudio.h"
 #include "ModulePhysics.h"
-#include "ModuleWindow.h"
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -40,8 +38,6 @@ bool ModuleSceneIntro::Start()
 	paddlesL.add(App->physics->CreatePaddleL(32, 185, (70 * DEGTORAD), 35 * DEGTORAD, GROUND, GROUND | BALL));
 	paddlesR.add(App->physics->CreatePaddleR(150, 387, (146 * DEGTORAD), 90 * DEGTORAD, GROUND, GROUND | BALL));
 	paddlesR.add(App->physics->CreatePaddleR(222, 258, (100 * DEGTORAD), 40 * DEGTORAD, GROUND, GROUND | BALL));
-	
-	//App->window->SetTitle("Nes Pinball %i",App->level->points);
 	return ret;
 }
 
@@ -80,7 +76,6 @@ update_status ModuleSceneIntro::Update()
 	{
 		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 7, GROUND, BALL|GROUND));
 		circles.getLast()->data->listener = App->level;
-		circles.getLast()->data->listener = App->sensors;
 	}
 
 	if(App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)

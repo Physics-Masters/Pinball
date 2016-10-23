@@ -21,12 +21,10 @@ public:
 
 public:
 	int DomeCounter;
-	bool AbleSpecial;
 	
 	PhysBody* LTriBounce;
 	PhysBody* RTriBounce;
 	PhysBody* Dome;
-	PhysBody* SpecialHole;
 	//ANIMATIONS AND TEXTURES
 	SDL_Texture* dome;
 
