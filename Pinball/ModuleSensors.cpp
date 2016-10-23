@@ -39,7 +39,29 @@ bool ModuleSensors::Start()
 		250, 217,
 		245, 212
 	};
+	int Hole[8] = {
+		145, 131,
+		161, 131,
+		157, 123,
+		148, 123
+	};
+	int LHole[8] = {
+		98, 100,
+		114, 100,
+		114, 104,
+		99, 104
+	};
+	int SHole[8] = {
+		196, 85,
+		207, 89,
+		209, 84,
+		197, 80
+	};
+	Holes.add(App->physics->CreatePolySensor(0, 0, Hole, 8, GROUND, GROUND | BALL));
+	Holes.add(App->physics->CreatePolySensor(0, 0, LHole, 8, GROUND, GROUND | BALL));
+	Holes.add(App->physics->CreatePolySensor(0, 0, SHole, 8, GROUND, GROUND | BALL));
 	SpecialHole = App->physics->CreatePolySensor(0, 0, SpHole,8, GROUND, GROUND | BALL);
+
 	LTriBounce = App->physics->CreateChain(0, 0, SLT, 8, GROUND, GROUND | BALL);;
 	LTriBounce->body->GetFixtureList()->SetRestitution(1);
 	LTriBounce->listener = this;

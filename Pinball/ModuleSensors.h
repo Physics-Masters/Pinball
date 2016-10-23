@@ -27,6 +27,7 @@ public:
 	PhysBody* RTriBounce;
 	PhysBody* Dome;
 	PhysBody* SpecialHole;
+	p2List<PhysBody*> Holes;
 	//ANIMATIONS AND TEXTURES
 	SDL_Texture* dome;
 
