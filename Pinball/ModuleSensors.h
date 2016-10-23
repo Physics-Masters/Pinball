@@ -6,6 +6,8 @@
 #include "Globals.h"
 #include "Animation.h"
 
+#define MAX_SENSORS 200
+class Sensor;
 class ModuleSensors : public Module
 {
 public:
@@ -15,9 +17,12 @@ public:
 	bool Start();
 	update_status Update();
 	bool CleanUp();
-	//void OnCollision(PhysBody*, PhysBody*);
+	void OnCollision(PhysBody*, PhysBody*);
 public:
 	PhysBody* LTriBounce;
 	PhysBody* RTriBounce;
+	PhysBody* Dome;
+private:
+	ModuleSensors* sensors[MAX_SENSORS];
 	
 };

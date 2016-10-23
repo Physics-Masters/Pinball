@@ -6,16 +6,17 @@
 #include "ModuleTextures.h"
 #include "ModuleAudio.h"
 #include "ModulePhysics.h"
+
 ModuleSensors::ModuleSensors(Application* app, bool start_enabled) : Module(app, start_enabled)
+{
+
+}
+ModuleSensors::~ModuleSensors()
 {
 	
 }
-ModuleSensors::~ModuleSensors()
-{}
 bool ModuleSensors::Start()
 {
-	
-
 	int SLT[8] = {
 		58, 314,
 		75, 354,
@@ -28,8 +29,10 @@ bool ModuleSensors::Start()
 		168, 348,
 		178, 325
 	};
+	Dome = App->physics->CreateRectangleSensor(102, 182, 38, 38, GROUND, GROUND | BALL);
 	LTriBounce = App->physics->CreateChain(0, 0, SLT, 8, GROUND, GROUND | BALL);;
 	LTriBounce->body->GetFixtureList()->SetRestitution(1);
+	LTriBounce->listener = this;
 	RTriBounce = App->physics->CreateChain(0, 0, SRT, 8, GROUND, GROUND | BALL);;
 	RTriBounce->body->GetFixtureList()->SetRestitution(1);
 	return true;
@@ -38,6 +41,10 @@ update_status ModuleSensors::Update()
 {
 	
 	return UPDATE_CONTINUE;
+}
+void ModuleSensors::OnCollision(PhysBody* A , PhysBody* B)
+{
+	LOG("BAKA");
 }
 bool ModuleSensors::CleanUp()
 {

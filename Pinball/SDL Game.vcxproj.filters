@@ -68,9 +68,6 @@
     <ClInclude Include="ModuleSensors.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SensorHole.h">
-      <Filter>Source Files\Sensors</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -111,9 +108,6 @@
     </ClCompile>
     <ClCompile Include="ModuleSensors.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SensorHole.cpp">
-      <Filter>Source Files\Sensors</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
