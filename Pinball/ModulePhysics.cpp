@@ -1,8 +1,10 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleInput.h"
+
 #include "ModuleRender.h"
 #include "ModuleSensors.h"
+#include "ModuleLevel.h"
 #include "ModulePhysics.h"
 #include "p2Point.h"
 #include "math.h"
@@ -651,6 +653,8 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 	if (physA == App->sensors->Dome)
 	{
 		App->sensors->DomeCounter++;
+		App->level->points += 100;
+		
 	}
 	if(physA && physA->listener != NULL)
 		physA->listener->OnCollision(physA, physB);
