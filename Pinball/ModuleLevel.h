@@ -17,13 +17,13 @@ public:
 	update_status Update();
 	bool CleanUp();
 	void OnCollision(PhysBody*, PhysBody*);
-
+	
+	//start functions
+	void createchains();
+	void createsensors();
 
 public:
 	p2List<PhysBody*> circles;
-	PhysBody* groundchain;
-	PhysBody* lvl1chain;
-	PhysBody* lvl2chain;
 	PhysBody* lvl1growndsensor0;
 	PhysBody* lvl1growndsensor1;
 	PhysBody* lvl2growndsensor0;
@@ -35,33 +35,31 @@ public:
 	PhysBody* lvl2sensor2;
 	PhysBody* Canonsensor;
 	PhysBody* exitfromcanon;
-
 	PhysBody* holesensor;
 	
-	p2List<PhysBody*> groundchains;
+	p2List<PhysBody*> mapchains;
 
+	//bools for changing lvls
 	bool atground;
 	bool atlvl1;
 	bool atlvl2;
 	bool start;
 	bool rdytostart;
 	bool ballatcannon;
+
 	//Animations
 	Animation LeftTriAnim;
 	Animation RightTriAnim;
 	Animation LightsAnim;
 	
-
+	//efects textures
 	SDL_Texture* LightsS;
 	SDL_Texture* diamonds;
-	SDL_Texture* Tri;
+
+	//lvl textures
+	SDL_Texture* Tri; 
 	SDL_Texture* ground;
 	SDL_Texture* lvl1;
 	SDL_Texture* lvl2;
 	uint bonus_fx;
-
-	uint current_time;
-
-	p2Point<int> ray;
-	bool ray_on;
 };

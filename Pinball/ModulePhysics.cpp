@@ -4,7 +4,7 @@
 
 #include "ModuleRender.h"
 #include "ModuleSensors.h"
-#include "ModuleLevel.h"
+
 #include "ModulePhysics.h"
 #include "p2Point.h"
 #include "math.h"
@@ -19,7 +19,7 @@ ModulePhysics::ModulePhysics(Application* app, bool start_enabled) : Module(app,
 {
 	world = NULL;
 	mouse_joint = NULL;
-	debug = true;
+	debug = false;
 }
 
 // Destructor
@@ -118,8 +118,6 @@ PhysBody* ModulePhysics::CreatePaddleL(int x, int y, float angd, float angu, uin
 		p[i].y = PIXEL_TO_METERS(points[i * 2 + 1]);
 	}
 	shape2.Set(p, 8);
-	
-	//shape2.SetAsBox(PIXEL_TO_METERS(25) * 0.5f, PIXEL_TO_METERS(4) * 0.5f);
 	b2FixtureDef fixture2;
 	fixture2.shape = &shape2;
 	fixture2.density = 2.0f;
@@ -144,7 +142,6 @@ PhysBody* ModulePhysics::CreatePaddleL(int x, int y, float angd, float angu, uin
 	revoluteJointDef.enableLimit = true;
 	revoluteJointDef.lowerAngle = angu;
 	revoluteJointDef.upperAngle = angd;
-	//paddles = (b2RevoluteJoint*)world->CreateJoint(&revoluteJointDef);
 	paddleList.add((b2RevoluteJoint*)world->CreateJoint(&revoluteJointDef));
 	return pbody;
 }
@@ -197,8 +194,7 @@ PhysBody* ModulePhysics::CreatePaddleR(int x, int y, float angd, float angu, uin
 		p[i].y = PIXEL_TO_METERS(points[i * 2 + 1]);
 	}
 	shape2.Set(p, 7);
-
-	//shape2.SetAsBox(PIXEL_TO_METERS(25) * 0.5f, PIXEL_TO_METERS(4) * 0.5f);
+	delete[] p;
 	b2FixtureDef fixture2;
 	fixture2.shape = &shape2;
 	fixture2.density = 2.0f;
@@ -223,7 +219,6 @@ PhysBody* ModulePhysics::CreatePaddleR(int x, int y, float angd, float angu, uin
 	revoluteJointDef.enableLimit = true;
 	revoluteJointDef.lowerAngle = angu;
 	revoluteJointDef.upperAngle = angd;
-	//paddles = (b2RevoluteJoint*)world->CreateJoint(&revoluteJointDef);
 	paddleListR.add((b2RevoluteJoint*)world->CreateJoint(&revoluteJointDef));
 	return pbody;
 }
@@ -403,7 +398,7 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size, uint16
 	}
 
 	shape.CreateLoop(p, size / 2);
-
+	delete[] p;
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
 	fixture.filter.categoryBits = categorybits;
@@ -411,7 +406,6 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size, uint16
 
 	b->CreateFixture(&fixture);
 
-	delete p;
 
 	PhysBody* pbody = new PhysBody();
 	pbody->body = b;
