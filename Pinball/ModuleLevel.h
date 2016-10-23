@@ -55,6 +55,7 @@ public:
 	//efects textures
 	SDL_Texture* LightsS;
 	SDL_Texture* diamonds;
+	SDL_Texture* Top;
 
 	//lvl textures
 	SDL_Texture* Tri; 

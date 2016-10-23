@@ -42,6 +42,7 @@ bool ModuleLevel::Start()
 	Tri = App->textures->Load("pinball/triangles.png");
 	LightsS = App->textures->Load("pinball/lights.png");
 	diamonds = App->textures->Load("pinball/Diamonds.png");
+	Top = App->textures->Load("pinball/topdetails.png");
 	
 	LightsAnim.PushBack({ 0,0,222,152 });
 	LightsAnim.PushBack({ 222,0,222,152 });
@@ -242,7 +243,7 @@ update_status ModuleLevel::Update()
 		}
 		
 	}
-	
+	App->renderer->Blit(Top, 0, 0, { (256, 432, 0, 0) }, 1.0f);
 	fVector normal(0.0f, 0.0f);
 	
 	return UPDATE_CONTINUE;
