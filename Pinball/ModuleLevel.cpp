@@ -61,7 +61,7 @@ bool ModuleLevel::Start()
 	lvl2growndsensor1 = App->physics->CreatePolySensor(163, 50, slvl, 12, LVL2, LVL2 | BALL);
 	lvl2growndsensor1->listener = this;
 	
-	lvl2growndsensor2 = App->physics->CreatePolySensor(122, -85, slvl, 12, LVL2, LVL2 | BALL);
+	lvl2growndsensor2 = App->physics->CreatePolySensor(127, -45, slvl, 12, LVL2, LVL2 | BALL);
 	lvl2growndsensor2->listener = this;
 
 	//reset game sensors
@@ -71,7 +71,7 @@ bool ModuleLevel::Start()
 	Canonsensor = App->physics->CreateRectangleSensor(245, 285, 10, 10, GROUND, GROUND);
 	Canonsensor->listener = this;
 
-	exitfromcanon = App->physics->CreateRectangleSensor(205, 260, 5, 5, START, START);
+	exitfromcanon = App->physics->CreateRectangleSensor(195, 250, 10, 10, START, START);
 	exitfromcanon->listener = this;
 
 	int elvl1[12] = {
@@ -251,52 +251,41 @@ bool ModuleLevel::Start()
 		};
 
 		int groundcircle[30] = {
-			35, 96,
-			37, 85,
-			44, 75,
-			54, 67,
-			62, 63,
-			69, 63,
-			71, 61,
 			70, 59,
 			60, 60,
-			52, 64,
-			42, 71,
-			36, 79,
-			33, 87,
-			32, 92,
-			33, 95
+			50, 64,
+			41, 72,
+			35, 81,
+			32, 88,
+			31, 96,
+			34, 97,
+			35, 94,
+			37, 86,
+			42, 77,
+			52, 68,
+			62, 63,
+			70, 63,
+			71, 61
 		};
 
-		int groundcircle1[56] = {
-			103, 60,
-			96, 59,
-			90, 59,
-			89, 61,
-			90, 63,
-			96, 63,
-			103, 65,
-			109, 68,
-			114, 72,
-			117, 76,
-			118, 81,
-			91, 82,
-			85, 83,
-			85, 96,
-			86, 103,
-			97, 103,
-			98, 97,
-			103, 93,
-			109, 93,
-			114, 97,
-			115, 103,
-			125, 103,
-			125, 95,
-			124, 84,
-			123, 81,
+		int groundcircle1[34] = {
+			91, 59,
+			99, 60,
+			107, 62,
+			114, 67,
 			119, 72,
-			113, 65,
-			108, 62
+			122, 79,
+			125, 87,
+			125, 96,
+			122, 96,
+			121, 95,
+			120, 85,
+			118, 77,
+			113, 71,
+			107, 67,
+			98, 64,
+			90, 63,
+			89, 61
 		};
 
 		int groundleft[26] = {
@@ -363,16 +352,52 @@ bool ModuleLevel::Start()
 			252, 284
 		};
 
+		int circleboss[36] = {
+			210, 101,
+			220, 96,
+			227, 86,
+			228, 74,
+			224, 63,
+			216, 56,
+			204, 54,
+			192, 56,
+			183, 63,
+			179, 73,
+			179, 83,
+			182, 92,
+			187, 96,
+			192, 80,
+			196, 74,
+			205, 73,
+			212, 80,
+			212, 88
+		};
+
+		int leftbarrier[8] = {
+			11, 378,
+			34, 388,
+			33, 392,
+			11, 380
+		};
+		int rightbarrier[8] = {
+			228, 382,
+			229, 376,
+			207, 387,
+			208, 394
+		};
+
 		groundchains.add(App->physics->CreateChain(0, 0, groundtolvl1, 40, GROUND, GROUND | BALL));
 		groundchains.add(App->physics->CreateChain(0, 0, groundcircle, 30, GROUND, GROUND | BALL));
-		groundchains.add(App->physics->CreateChain(0, 0, groundcircle1, 56, GROUND, GROUND | BALL));
+		groundchains.add(App->physics->CreateChain(0, 0, groundcircle1, 34, GROUND, GROUND | BALL));
 		groundchains.add(App->physics->CreateChain(0, -1, groundleft, 26, GROUND, GROUND | BALL));
 		groundchains.add(App->physics->CreateChain(0, -1, groundright, 24, GROUND, GROUND | BALL));
 		groundchains.add(App->physics->CreateChain(0, 4, leftTri, 8, GROUND, GROUND | BALL));
 		groundchains.add(App->physics->CreateChain(0, 4, rightTri, 8, GROUND, GROUND | BALL));
 		groundchains.add(App->physics->CreateChain(0, 0, starttube, 16, GROUND, GROUND | BALL));
 		groundchains.add(App->physics->CreateChain(0, 16, canon, 16, START, START));
-
+		groundchains.add(App->physics->CreateChain(0, 0, circleboss, 36, GROUND, GROUND));
+		groundchains.add(App->physics->CreateChain(0, 0, leftbarrier, 8, GROUND, GROUND));
+		groundchains.add(App->physics->CreateChain(0, 0, rightbarrier, 8, GROUND, GROUND));
 
 		int level1[132] = {
 			70, 140,
@@ -445,7 +470,7 @@ bool ModuleLevel::Start()
 		lvl1chain = App->physics->CreateChain(0, 16, level1, 132, LVL1, LVL1);
 	
 	
-		int level2[108] = {
+		int level2[116] = {
 			32, 204,
 			21, 175,
 			15, 144, 
@@ -463,6 +488,10 @@ bool ModuleLevel::Start()
 			179, 39,
 			182, 44,
 			190, 67, 
+			191, 82,
+			187, 97,
+			208, 100,
+			212, 82,
 			208, 64,
 			203, 46,
 			193, 28,
@@ -501,7 +530,7 @@ bool ModuleLevel::Start()
 			0, 169, 
 			13, 208
 		};
-		lvl1chain = App->physics->CreateChain(0, 0, level2, 108, LVL2, LVL2 | BALL);
+		lvl1chain = App->physics->CreateChain(0, 0, level2, 116, LVL2, LVL2 | BALL);
 	
 	return ret;
 }
@@ -648,6 +677,7 @@ void ModuleLevel::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	{
 		if (bodyB->body->GetType() == b2_dynamicBody && bodyA->body->GetFixtureList()->IsSensor() == true)
 		{
+			
 			p2List_item<PhysBody*>* c = App->scene_intro->circles.getFirst();
 			b2Filter balllvl;
 			balllvl.categoryBits = bodyB->body->GetFixtureList()->GetFilterData().categoryBits;
@@ -660,6 +690,7 @@ void ModuleLevel::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 					{
 						balllvl.categoryBits = LVL1;
 						balllvl.maskBits = LVL1 | BALL;
+						App->audio->PlayFx(App->scene_intro->bonus_fx);
 					}
 					if (bodyA == lvl2sensor0 || bodyA == lvl2sensor1)
 					{
@@ -670,6 +701,7 @@ void ModuleLevel::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 					{
 						balllvl.categoryBits = GROUND;
 						balllvl.maskBits = GROUND | BALL;
+						App->audio->PlayFx(App->scene_intro->bonus_fx);
 					}
 					if (bodyA == holesensor)
 					{
