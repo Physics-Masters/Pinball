@@ -653,7 +653,7 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 	if (physA == App->sensors->Dome)
 	{
 		App->sensors->DomeCounter++;
-		App->level->points += 100;
+		//App->level->points += 100;
 		
 	}
 	if(physA && physA->listener != NULL)

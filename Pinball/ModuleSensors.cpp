@@ -81,8 +81,17 @@ void ModuleSensors::OnCollision(PhysBody* A , PhysBody* B)
 {
  	if (B == SpecialHole)
 	{
-		LOG("NONONONONO");
+		if (AbleSpecial == true)
+		{
+			DiamondCount++;
+			if (DomeCounter >= 3)
+			{
+				DomeCounter = 0;
+				AbleSpecial = false;
+			}
+		}
 	}
+	
 	//DomeCounter++;
 
 }

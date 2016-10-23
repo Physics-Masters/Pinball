@@ -50,8 +50,10 @@ public:
 	Animation LeftTriAnim;
 	Animation RightTriAnim;
 	Animation LightsAnim;
+	
 
 	SDL_Texture* LightsS;
+	SDL_Texture* diamonds;
 	SDL_Texture* Tri;
 	SDL_Texture* ground;
 	SDL_Texture* lvl1;

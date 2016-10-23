@@ -93,6 +93,8 @@ bool ModuleLevel::Start()
 	lvl2 = App->textures->Load("pinball/level2.png");
 	Tri = App->textures->Load("pinball/triangles.png");
 	LightsS = App->textures->Load("pinball/lights.png");
+	diamonds = App->textures->Load("pinball/Diamonds.png");
+	
 	LightsAnim.PushBack({ 0,0,222,152 });
 	LightsAnim.PushBack({ 222,0,222,152 });
 	LightsAnim.PushBack({ 0,153,222,152 });
@@ -558,6 +560,42 @@ update_status ModuleLevel::Update()
 	App->renderer->Blit(Tri, 57, 316, &(LeftTriAnim.GetCurrentFrame()), 1.0f);
 	App->renderer->Blit(Tri, 163, 316, &(RightTriAnim.GetCurrentFrame()), 1.0f);
 	App->renderer->Blit(LightsS, 14, 105, &(LightsAnim.GetCurrentFrame()), 1.0f);
+	App->renderer->Blit(lvl1, 0, 15, { (256, 432, 0, 0) }, 1.0f);
+	if (App->sensors->DomeCounter >= 1)
+	{
+		App->renderer->Blit(App->sensors->dome, 95, 226, NULL, 1.0f);
+	}
+	if (App->sensors->DomeCounter >= 2)
+	{
+		App->renderer->Blit(App->sensors->dome, 112, 230, NULL, 1.0f);
+	}
+	if (App->sensors->DomeCounter >= 3)
+	{
+		App->renderer->Blit(App->sensors->dome, 129, 227, NULL, 1.0f);
+		App->sensors->AbleSpecial = true;
+		//App->sensors->DiamondCount++;
+		
+	}
+	if (App->sensors->DiamondCount == 1)
+	{
+		SDL_Rect rect;
+		rect.x = 0;
+		rect.y = 0;
+		rect.w = 14;
+		rect.h = 14;
+		App->renderer->Blit(diamonds, 99, 336, &rect, 1.0f);
+	}
+	if (App->sensors->DiamondCount == 2)
+	{
+		SDL_Rect rect;
+		rect.x = 28;
+		rect.y = 0;
+		rect.w = 14;
+		rect.h = 14;
+		App->renderer->Blit(diamonds, 104, 320, &rect, 1.0f);
+
+
+	}
 	// render all balls at background
 	c = App->scene_intro->circles.getFirst();
 	while (c != NULL)
@@ -583,19 +621,7 @@ update_status ModuleLevel::Update()
 	}
 
 	//render lvl 1
-	App->renderer->Blit(lvl1, 0, 15, { (256, 432, 0, 0) }, 1.0f);
-	if (App->sensors->DomeCounter >= 1)
-	{
-		App->renderer->Blit(App->sensors->dome, 95, 226, NULL, 1.0f);
-	}
-	if (App->sensors->DomeCounter >= 2)
-	{
-		App->renderer->Blit(App->sensors->dome, 112, 230, NULL, 1.0f);
-	}
-	if (App->sensors->DomeCounter >= 3)
-	{
-		App->renderer->Blit(App->sensors->dome, 129, 227, NULL, 1.0f);
-	}
+	
 	//render all balls at lvl 1
 	c = App->scene_intro->circles.getFirst();
 	while (c != NULL)
