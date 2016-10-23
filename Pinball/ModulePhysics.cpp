@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "ModuleInput.h"
 #include "ModuleRender.h"
+#include "ModuleSensors.h"
 #include "ModulePhysics.h"
 #include "p2Point.h"
 #include "math.h"
@@ -647,7 +648,10 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 {
 	PhysBody* physA = (PhysBody*)contact->GetFixtureA()->GetBody()->GetUserData();
 	PhysBody* physB = (PhysBody*)contact->GetFixtureB()->GetBody()->GetUserData();
-
+	if (physA == App->sensors->Dome)
+	{
+		App->sensors->DomeCounter++;
+	}
 	if(physA && physA->listener != NULL)
 		physA->listener->OnCollision(physA, physB);
 

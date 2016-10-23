@@ -1,6 +1,7 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleRender.h"
+#include "ModuleSensors.h"
 #include "ModuleLevel.h"
 #include "ModuleSceneIntro.h"
 #include "ModuleInput.h"
@@ -554,6 +555,18 @@ update_status ModuleLevel::Update()
 
 	//render lvl 1
 	App->renderer->Blit(lvl1, 0, 15, { (256, 432, 0, 0) }, 1.0f);
+	if (App->sensors->DomeCounter >= 1)
+	{
+		App->renderer->Blit(App->sensors->dome, 95, 226, NULL, 1.0f);
+	}
+	if (App->sensors->DomeCounter >= 2)
+	{
+		App->renderer->Blit(App->sensors->dome, 112, 230, NULL, 1.0f);
+	}
+	if (App->sensors->DomeCounter >= 3)
+	{
+		App->renderer->Blit(App->sensors->dome, 129, 227, NULL, 1.0f);
+	}
 	//render all balls at lvl 1
 	c = App->scene_intro->circles.getFirst();
 	while (c != NULL)

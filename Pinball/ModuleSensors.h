@@ -18,10 +18,16 @@ public:
 	update_status Update();
 	bool CleanUp();
 	void OnCollision(PhysBody*, PhysBody*);
+
 public:
+	int DomeCounter;
+	
 	PhysBody* LTriBounce;
 	PhysBody* RTriBounce;
 	PhysBody* Dome;
+	//ANIMATIONS AND TEXTURES
+	SDL_Texture* dome;
+
 private:
 	ModuleSensors* sensors[MAX_SENSORS];
 	
