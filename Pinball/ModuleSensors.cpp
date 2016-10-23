@@ -33,6 +33,13 @@ bool ModuleSensors::Start()
 
 	Dome = App->physics->CreateRectangleSensor(120, 200, 38, 38, GROUND, GROUND | BALL);
 	Dome->listener = this;
+	int SpHole[8] = {
+		239, 215,
+		249, 225,
+		250, 217,
+		245, 212
+	};
+	SpecialHole = App->physics->CreatePolySensor(0, 0, SpHole,8, GROUND, GROUND | BALL);
 	LTriBounce = App->physics->CreateChain(0, 0, SLT, 8, GROUND, GROUND | BALL);;
 	LTriBounce->body->GetFixtureList()->SetRestitution(1);
 	LTriBounce->listener = this;
@@ -50,7 +57,11 @@ update_status ModuleSensors::Update()
 }
 void ModuleSensors::OnCollision(PhysBody* A , PhysBody* B)
 {
-	
+ 	if (B == SpecialHole)
+	{
+		LOG("NONONONONO");
+	}
+	//DomeCounter++;
 
 }
 bool ModuleSensors::CleanUp()
