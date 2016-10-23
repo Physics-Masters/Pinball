@@ -293,35 +293,6 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, uint16 categoryb
 
 	return pbody;
 }
-PhysBody* ModulePhysics::StartGame(uint16 categorybits, uint16 maskbits)
-{
-	b2BodyDef body;
-	body.type = b2_dynamicBody;
-	body.position.Set(PIXEL_TO_METERS(App->input->GetMouseX()), PIXEL_TO_METERS(App->input->GetMouseY()));
-	body.bullet = true;
-	b2Body* b = world->CreateBody(&body);
-
-	b2CircleShape shape;
-	shape.m_radius = PIXEL_TO_METERS(7);
-	b2FixtureDef fixture;
-	fixture.shape = &shape;
-	fixture.density = 1.0f;
-	fixture.filter.categoryBits = categorybits;
-	fixture.filter.maskBits = maskbits;
-	
-
-	b->CreateFixture(&fixture);
-	b2Vec2 force;
-	force.x = -50;
-	force.y = -50;
-	b->ApplyForceToCenter(force,true);
-	PhysBody* pbody = new PhysBody();
-	pbody->body = b;
-	b->SetUserData(pbody);
-	pbody->width = pbody->height = 7;
-
-	return pbody;
-}
 PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height, uint16 categorybits, uint16 maskbits)
 {
 	b2BodyDef body;

@@ -34,9 +34,9 @@ bool ModuleSceneIntro::Start()
 	
 	
 	//LEFT PADDLES
-	paddlesL.add(App->physics->CreatePaddleL(90, 387, (40 * DEGTORAD), -30 * DEGTORAD, GROUND, GROUND|BALL));
+	paddlesL.add(App->physics->CreatePaddleL(90, 387, (30 * DEGTORAD), -30* DEGTORAD, GROUND, GROUND|BALL));
 	paddlesL.add(App->physics->CreatePaddleL(32, 185, (70 * DEGTORAD), 35 * DEGTORAD, GROUND, GROUND | BALL));
-	paddlesR.add(App->physics->CreatePaddleR(150, 387, (146 * DEGTORAD), 78 * DEGTORAD, GROUND, GROUND | BALL));
+	paddlesR.add(App->physics->CreatePaddleR(150, 387, (146 * DEGTORAD), 90 * DEGTORAD, GROUND, GROUND | BALL));
 	paddlesR.add(App->physics->CreatePaddleR(222, 258, (100 * DEGTORAD), 40 * DEGTORAD, GROUND, GROUND | BALL));
 	return ret;
 }
@@ -52,12 +52,7 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
-	if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
-	{
-		ray_on = !ray_on;
-		ray.x = App->input->GetMouseX();
-		ray.y = App->input->GetMouseY();
-	}
+
 	//MAKES PADDLES MOVE
 	if (App->input->GetKey(SDL_SCANCODE_Q) == KEY_DOWN)
 	{

@@ -33,12 +33,19 @@ public:
 	PhysBody* lvl2sensor0;
 	PhysBody* lvl2sensor1;
 	PhysBody* lvl2sensor2;
+	PhysBody* Canonsensor;
+	PhysBody* exitfromcanon;
+
+	PhysBody* holesensor;
 	
 	p2List<PhysBody*> groundchains;
 
 	bool atground;
 	bool atlvl1;
 	bool atlvl2;
+	bool start;
+	bool rdytostart;
+	bool ballatcannon;
 	//Animations
 	Animation LeftTriAnim;
 	Animation RightTriAnim;
@@ -50,6 +57,9 @@ public:
 	SDL_Texture* lvl1;
 	SDL_Texture* lvl2;
 	uint bonus_fx;
+
+	uint current_time;
+
 	p2Point<int> ray;
 	bool ray_on;
 };

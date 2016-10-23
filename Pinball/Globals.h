@@ -26,7 +26,8 @@ enum category_Bits
 	LVL1 = 0x0002,
 	LVL2 = 0x0004,
 	BALL = 0x0008,
-	BOX = 0x0016
+	BOX = 0x0016,
+	START = 0x0032
 };
 
 // Configuration -----------
