@@ -12,6 +12,9 @@
     <Filter Include="Header Files\Containers">
       <UniqueIdentifier>{97c4111e-b102-4ba8-9053-6f07ccbbe3d4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Sensors">
+      <UniqueIdentifier>{abbe69c6-bcec-4c3c-b06b-a46595c8eb40}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h">
@@ -65,6 +68,9 @@
     <ClInclude Include="ModuleSensors.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SensorHole.h">
+      <Filter>Source Files\Sensors</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -105,6 +111,9 @@
     </ClCompile>
     <ClCompile Include="ModuleSensors.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SensorHole.cpp">
+      <Filter>Source Files\Sensors</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
