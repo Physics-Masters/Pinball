@@ -3,7 +3,7 @@
 #include "ModuleRender.h"
 #include "ModuleSensors.h"
 #include "ModuleLevel.h"
-#include "ModuleSceneIntro.h"
+
 #include "ModuleInput.h"
 #include "ModuleTextures.h"
 #include "ModuleAudio.h"
@@ -42,6 +42,12 @@ bool ModuleLevel::Start()
 	Tri = App->textures->Load("pinball/triangles.png");
 	LightsS = App->textures->Load("pinball/lights.png");
 	diamonds = App->textures->Load("pinball/Diamonds.png");
+	circletexture = App->textures->Load("pinball/ball.png");
+	paddletexture = App->textures->Load("pinball/paddle.png");
+	paddle2texture = App->textures->Load("pinball/paddle2.png");
+
+	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
+
 	
 	LightsAnim.PushBack({ 0,0,222,152 });
 	LightsAnim.PushBack({ 222,0,222,152 });
@@ -55,6 +61,13 @@ bool ModuleLevel::Start()
 	RightTriAnim.PushBack({ 42,0,21,40 });
 	RightTriAnim.PushBack({ 63,0,21,40 });
 	RightTriAnim.speed = 0.05;
+
+	//LEFT PADDLES
+	paddlesL.add(App->physics->CreatePaddleL(90, 387, (30 * DEGTORAD), -30 * DEGTORAD, GROUND, GROUND | BALL));
+	paddlesL.add(App->physics->CreatePaddleL(32, 185, (70 * DEGTORAD), 35 * DEGTORAD, GROUND, GROUND | BALL));
+	//RIGHT PADDLES
+	paddlesR.add(App->physics->CreatePaddleR(150, 387, (146 * DEGTORAD), 90 * DEGTORAD, GROUND, GROUND | BALL));
+	paddlesR.add(App->physics->CreatePaddleR(222, 258, (100 * DEGTORAD), 40 * DEGTORAD, GROUND, GROUND | BALL));
 
 		
 	return ret;
@@ -71,12 +84,38 @@ bool ModuleLevel::CleanUp()
 // Update: draw background
 update_status ModuleLevel::Update()
 {
+	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN && circle == nullptr && ballatcannon == false)
+	{
+		circle = App->physics->CreateCircle( 245 , 410, 7, GROUND, BALL | GROUND);
+		circle->listener = this;
+		circle->listener = App->sensors;
+		ballatcannon = true;
+	}
+
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && ballatcannon == true)
 	{
 		rdytostart = true;
 		ballatcannon = false;
 	}
-	p2List_item<PhysBody*>* c;
+	//MAKES PADDLES MOVE
+	if (App->input->GetKey(SDL_SCANCODE_Q) == KEY_DOWN)
+	{
+		App->physics->PaddleMoveL();
+	}
+	if (App->input->GetKey(SDL_SCANCODE_Q) == KEY_UP)
+	{
+		App->physics->PaddleStopL();
+
+	}
+	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN)
+	{
+		App->physics->PaddleMoveR();
+	}
+	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_UP)
+	{
+		App->physics->PaddleStopR();
+
+	}
 	
 	// render ground
 	App->renderer->Blit(ground, 0, 0, { (256, 432, 0, 0) }, 1.0f);
@@ -119,8 +158,38 @@ update_status ModuleLevel::Update()
 
 
 	}
+	p2List_item<PhysBody*>* c;
+
+	c = paddlesL.getFirst();
+	while (c != NULL)
+	{
+		int x, y;
+		c->data->GetPosition(x, y);
+
+		App->renderer->Blit(paddletexture, x - 1, y, NULL, 1.0f, c->data->GetRotation(), 0, 0);
+		c = c->next;
+	}
+
+	c = paddlesR.getFirst();
+	while (c != NULL)
+	{
+		int x, y;
+		c->data->GetPosition(x, y);
+
+		App->renderer->Blit(paddle2texture, x, y, NULL, 1.0f, c->data->GetRotation(), 0, 0);
+		c = c->next;
+	}
+
+	if (circle != nullptr) {
+		if (circle->body->GetFixtureList()->GetFilterData().categoryBits == GROUND || circle->body->GetFixtureList()->GetFilterData().categoryBits == START)
+		{
+			int x, y;
+			circle->GetPosition(x, y);
+			App->renderer->Blit(circletexture, x, y, NULL, 1.0f);
+		}
+	}
 	// render all balls at background
-	c = App->scene_intro->circles.getFirst();
+	/*c = App->scene_intro->circles.getFirst();
 	while (c != NULL)
 	{
 
@@ -132,39 +201,47 @@ update_status ModuleLevel::Update()
 			App->renderer->Blit(App->scene_intro->circle, x, y, NULL, 1.0f);
 		}
 		c = c->next;
-	}
-	c = App->scene_intro->paddlesL.getFirst();
-	while (c != NULL)
-	{
-		int x, y;
-		c->data->GetPosition(x, y);
-
-		App->renderer->Blit(App->scene_intro->paddle, x - 1, y, NULL, 1.0f, c->data->GetRotation(), 0, 0);
-		c = c->next;
-	}
+	}*/
+	
 
 	//render lvl 1
 	App->renderer->Blit(lvl1, 0, 15, { (256, 432, 0, 0) }, 1.0f);
-
+	if (circle != nullptr) {
+		if (circle->body->GetFixtureList()->GetFilterData().categoryBits == LVL1)
+		{
+			int x, y;
+			circle->GetPosition(x, y);
+			App->renderer->Blit(circletexture, x, y, NULL, 1.0f);
+		}
+	}
 	//render all balls at lvl 1
-	c = App->scene_intro->circles.getFirst();
+	/*c = App->scene_intro->circles.getFirst();
 	while (c != NULL)
 	{
 
 		int x, y;
 		c->data->GetPosition(x, y);
-
+		
 		if (c->data->body->GetFixtureList()->GetFilterData().categoryBits == LVL1)
 		{
 			App->renderer->Blit(App->scene_intro->circle, x, y, NULL, 1.0f);
 		}
 		c = c->next;
-	}
+	}*/
 
 	//render lvl 2
 	App->renderer->Blit(lvl2, 0, 0, { (256, 432, 0, 0) }, 1.0f);
 	//render balls at lvl 2
-	c = App->scene_intro->circles.getFirst();
+	if (circle != nullptr) {
+		if (circle->body->GetFixtureList()->GetFilterData().categoryBits == LVL2)
+		{
+			int x, y;
+			circle->GetPosition(x, y);
+			App->renderer->Blit(circletexture, x, y, NULL, 1.0f);
+		}
+	}
+	
+	/*c = App->scene_intro->circles.getFirst();
 	while (c != NULL)
 	{
 
@@ -173,14 +250,19 @@ update_status ModuleLevel::Update()
 
 		if (c->data->body->GetFixtureList()->GetFilterData().categoryBits == LVL2)
 		{
-			App->renderer->Blit(App->scene_intro->circle, x, y, NULL, 1.0f);
+			App->renderer->Blit(circletexture, x, y, NULL, 1.0f);
 		}
 		c = c->next;
-	}
+	}*/
 
-	if (start == true)
+	if (start == true && circle != nullptr)
 	{
-		c = App->scene_intro->circles.getFirst();
+		if (circle->body->GetFixtureList()->GetFilterData().categoryBits == GROUND)
+		{
+			b2Vec2 a(PIXEL_TO_METERS(245), PIXEL_TO_METERS(410));
+			circle->body->SetTransform(a, circle->body->GetAngle());
+		}
+		/*c = App->scene_intro->circles.getFirst();
 		while (c != NULL)
 		{
 			if (c->data->body->GetFixtureList()->GetFilterData().categoryBits == GROUND)
@@ -189,14 +271,25 @@ update_status ModuleLevel::Update()
 				c->data->body->SetTransform(a, c->data->body->GetAngle());		
 			}
 			c = c->next;
-		}
+		}*/
 		start = false;
 		ballatcannon = true;
 
 	}
-	if (rdytostart == true)
+	if (rdytostart == true && circle != nullptr)
 	{
-		c = App->scene_intro->circles.getFirst();
+		if (circle->body->GetFixtureList()->GetFilterData().categoryBits == GROUND)
+		{
+			circle->body->SetLinearVelocity(b2Vec2(0, 0));
+			circle->body->ApplyForceToCenter(b2Vec2(0, -50), true);
+		}
+		if (circle->body->GetFixtureList()->GetFilterData().categoryBits == START)
+		{
+			circle->body->SetLinearVelocity(b2Vec2(0, 0));
+			circle->body->ApplyForceToCenter(b2Vec2(-50, -50), true);
+			rdytostart = false;
+		}
+		/*c = App->scene_intro->circles.getFirst();
 		while (c != NULL)
 		{
 			if (c->data->body->GetFixtureList()->GetFilterData().categoryBits == GROUND)
@@ -211,7 +304,7 @@ update_status ModuleLevel::Update()
 				rdytostart = false;
 			}
 			c = c->next;
-		}
+		}*/
 		
 	}
 	
@@ -228,19 +321,19 @@ void ModuleLevel::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		if (bodyB->body->GetType() == b2_dynamicBody && bodyA->body->GetFixtureList()->IsSensor() == true)
 		{
 			
-			p2List_item<PhysBody*>* c = App->scene_intro->circles.getFirst();
+		//	p2List_item<PhysBody*>* c = App->scene_intro->circles.getFirst();
 			b2Filter balllvl;
 			balllvl.categoryBits = bodyB->body->GetFixtureList()->GetFilterData().categoryBits;
 			balllvl.maskBits = bodyB->body->GetFixtureList()->GetFilterData().maskBits;
-			while (c != NULL)
-			{
-				if (c->data->body == bodyB->body)
+			//while (c != NULL)
+			//{
+				if (circle->body == bodyB->body)
 				{
 					if (bodyA == lvl1sensor)
 					{
 						balllvl.categoryBits = LVL1;
 						balllvl.maskBits = LVL1 | BALL;
-						App->audio->PlayFx(App->scene_intro->bonus_fx);
+						App->audio->PlayFx(bonus_fx);
 					}
 					if (bodyA == lvl2sensor0 || bodyA == lvl2sensor1)
 					{
@@ -251,7 +344,7 @@ void ModuleLevel::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 					{
 						balllvl.categoryBits = GROUND;
 						balllvl.maskBits = GROUND | BALL;
-						App->audio->PlayFx(App->scene_intro->bonus_fx);
+						App->audio->PlayFx(bonus_fx);
 					}
 					if (bodyA == holesensor)
 					{
@@ -262,11 +355,11 @@ void ModuleLevel::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 					{
 						balllvl.categoryBits = START;
 						balllvl.maskBits = START;
-						c->data->body->SetLinearVelocity(b2Vec2(0, 0));
+						circle->body->SetLinearVelocity(b2Vec2(0, 0));
 					}
-					c->data->body->GetFixtureList()->SetFilterData(balllvl);
-				}
-				c = c->next;
+					circle->body->GetFixtureList()->SetFilterData(balllvl);
+				//}
+				//c = c->next;
 			}
 		}
 	}

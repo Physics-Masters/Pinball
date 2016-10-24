@@ -23,7 +23,13 @@ public:
 	void createsensors();
 
 public:
-	p2List<PhysBody*> circles;
+	//dynamic bodys
+	PhysBody* circle;
+	p2List<PhysBody*> paddlesL;
+	p2List<PhysBody*> paddlesR;
+
+
+	//sensors
 	PhysBody* lvl1growndsensor0;
 	PhysBody* lvl1growndsensor1;
 	PhysBody* lvl2growndsensor0;
@@ -61,5 +67,8 @@ public:
 	SDL_Texture* ground;
 	SDL_Texture* lvl1;
 	SDL_Texture* lvl2;
+	SDL_Texture* circletexture;
+	SDL_Texture* paddletexture;
+	SDL_Texture* paddle2texture;
 	uint bonus_fx;
 };

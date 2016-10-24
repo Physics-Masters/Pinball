@@ -8,7 +8,6 @@
 #include "ModuleAudio.h"
 #include "ModulePlayer.h"
 #include "ModulePhysics.h"
-#include "ModuleSceneIntro.h"
 #include "ModuleSensors.h"
 
 #include "Application.h"
@@ -22,7 +21,6 @@ Application::Application()
 	input = new ModuleInput(this);
 	audio = new ModuleAudio(this, true);
 	player = new ModulePlayer(this);
-	scene_intro = new ModuleSceneIntro(this);
 	physics = new ModulePhysics(this);
 	sensors = new ModuleSensors(this);
 
@@ -40,9 +38,7 @@ Application::Application()
 	AddModule(input);
 	AddModule(audio);
 	
-	
-	// Scenes
-	AddModule(scene_intro);
+
 	
 	// Player
 	AddModule(player);

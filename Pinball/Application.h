@@ -11,7 +11,6 @@ class ModuleLevel;
 class ModuleInput;
 class ModuleAudio;
 class ModulePlayer;
-class ModuleSceneIntro;
 class ModulePhysics;
 class ModuleSensors;
 
@@ -26,7 +25,6 @@ public:
 	ModuleInput* input;
 	ModuleAudio* audio;
 	ModulePlayer* player;
-	ModuleSceneIntro* scene_intro;
 	ModulePhysics* physics;
 	ModuleSensors* sensors;
 
