@@ -27,7 +27,8 @@ public:
 	PhysBody* circle;
 	p2List<PhysBody*> paddlesL;
 	p2List<PhysBody*> paddlesR;
-
+	p2List<PhysBody*> circles;
+	p2List<PhysBody*> circlestodelete;
 
 	//sensors
 	PhysBody* lvl1growndsensor0;

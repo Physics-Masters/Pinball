@@ -37,19 +37,10 @@ bool ModulePhysics::Start()
 	// needed to create joints like mouse joint
 	b2BodyDef bd;
 	ground = world->CreateBody(&bd);
-
-	// big static circle as "ground" in the middle of the screen
-	int x = SCREEN_WIDTH / 2;
-	int y = SCREEN_HEIGHT / 1.5f;
-	int diameter = SCREEN_WIDTH / 2;
-	//PADDLE
-	
-	
-	
+		
 	return true;
 }
 
-// 
 update_status ModulePhysics::PreUpdate()
 {
 	world->Step(1.0f / 60.0f, 6, 2);
@@ -359,7 +350,7 @@ PhysBody* ModulePhysics::CreatePolySensor(int x, int y, int* points, int size, u
 
 	b2Vec2* p = new b2Vec2[size/2];
 
-	for (uint i = 0; i < size/2; ++i)
+	for (int i = 0; i < size/2; ++i)
 	{
 		p[i].x = PIXEL_TO_METERS(points[i * 2 + 0]);
 		p[i].y = PIXEL_TO_METERS(points[i * 2 + 1]);
@@ -391,7 +382,7 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size, uint16
 	b2ChainShape shape;
 	b2Vec2* p = new b2Vec2[size / 2];
 
-	for(uint i = 0; i < size / 2; ++i)
+	for(int i = 0; i < size / 2; ++i)
 	{
 		p[i].x = PIXEL_TO_METERS(points[i * 2 + 0]);
 		p[i].y = PIXEL_TO_METERS(points[i * 2 + 1]);
@@ -593,39 +584,6 @@ bool PhysBody::Contains(int x, int y) const
 	return false;
 }
 
-int PhysBody::RayCast(int x1, int y1, int x2, int y2, float& normal_x, float& normal_y) const
-{
-	int ret = -1;
-
-	b2RayCastInput input;
-	b2RayCastOutput output;
-
-	input.p1.Set(PIXEL_TO_METERS(x1), PIXEL_TO_METERS(y1));
-	input.p2.Set(PIXEL_TO_METERS(x2), PIXEL_TO_METERS(y2));
-	input.maxFraction = 1.0f;
-
-	const b2Fixture* fixture = body->GetFixtureList();
-
-	while(fixture != NULL)
-	{
-		if(fixture->GetShape()->RayCast(&output, input, body->GetTransform(), 0) == true)
-		{
-			// do we want the normal ?
-
-			float fx = x2 - x1;
-			float fy = y2 - y1;
-			float dist = sqrtf((fx*fx) + (fy*fy));
-
-			normal_x = output.normal.x;
-			normal_y = output.normal.y;
-
-			return output.fraction * dist;
-		}
-		fixture = fixture->GetNext();
-	}
-
-	return ret;
-}
 
 void ModulePhysics::BeginContact(b2Contact* contact)
 {

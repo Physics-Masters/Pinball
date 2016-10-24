@@ -42,29 +42,29 @@ bool ModuleLevel::Start()
 	Tri = App->textures->Load("pinball/triangles.png");
 	LightsS = App->textures->Load("pinball/lights.png");
 	diamonds = App->textures->Load("pinball/Diamonds.png");
-<<<<<<< HEAD
+
 	circletexture = App->textures->Load("pinball/ball.png");
 	paddletexture = App->textures->Load("pinball/paddle.png");
 	paddle2texture = App->textures->Load("pinball/paddle2.png");
 
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 
-=======
+
 	Top = App->textures->Load("pinball/topdetails.png");
->>>>>>> origin/master
+
 	
 	LightsAnim.PushBack({ 0,0,222,152 });
 	LightsAnim.PushBack({ 222,0,222,152 });
 	LightsAnim.PushBack({ 0,153,222,152 });
 	LightsAnim.PushBack({ 222,153,222,152 });
 	LightsAnim.PushBack({ 0,305,222,152 });
-	LightsAnim.speed = 0.02;
+	LightsAnim.speed = 0.02f;
 	LeftTriAnim.PushBack({ 0,0,21,40 });
 	LeftTriAnim.PushBack({ 21,0,21,40 });
-	LeftTriAnim.speed = 0.05;
+	LeftTriAnim.speed = 0.05f;
 	RightTriAnim.PushBack({ 42,0,21,40 });
 	RightTriAnim.PushBack({ 63,0,21,40 });
-	RightTriAnim.speed = 0.05;
+	RightTriAnim.speed = 0.05f;
 
 	//LEFT PADDLES
 	paddlesL.add(App->physics->CreatePaddleL(90, 387, (30 * DEGTORAD), -30 * DEGTORAD, GROUND, GROUND | BALL));
@@ -91,11 +91,17 @@ update_status ModuleLevel::Update()
 	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN && circle == nullptr && ballatcannon == false)
 	{
 		circle = App->physics->CreateCircle( 245 , 410, 7, GROUND, BALL | GROUND);
+		circles.add(circle);
 		circle->listener = this;
 		circle->listener = App->sensors;
 		ballatcannon = true;
 	}
-
+	if (App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
+	{
+		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 7, GROUND, BALL | GROUND));
+		circles.getLast()->data->listener = this;
+		circles.getLast()->data->listener = App->sensors;
+	}
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && ballatcannon == true)
 	{
 		rdytostart = true;
@@ -120,6 +126,16 @@ update_status ModuleLevel::Update()
 		App->physics->PaddleStopR();
 
 	}
+	p2List_item<PhysBody*>* c = circlestodelete.getFirst();
+
+	while (c != NULL)
+	{
+		circles.del(circles.findNode(c->data));
+		App->physics->DestroyBodys(*c->data);
+		LOG("Destroyed body");
+		c = c->next;
+	}
+	circlestodelete.clear();
 	
 	// render ground
 	App->renderer->Blit(ground, 0, 0, { (256, 432, 0, 0) }, 1.0f);
@@ -190,7 +206,7 @@ update_status ModuleLevel::Update()
 
 
 	}
-	p2List_item<PhysBody*>* c;
+
 
 	c = paddlesL.getFirst();
 	while (c != NULL)
@@ -211,17 +227,8 @@ update_status ModuleLevel::Update()
 		App->renderer->Blit(paddle2texture, x, y, NULL, 1.0f, c->data->GetRotation(), 0, 0);
 		c = c->next;
 	}
-
-	if (circle != nullptr) {
-		if (circle->body->GetFixtureList()->GetFilterData().categoryBits == GROUND || circle->body->GetFixtureList()->GetFilterData().categoryBits == START)
-		{
-			int x, y;
-			circle->GetPosition(x, y);
-			App->renderer->Blit(circletexture, x, y, NULL, 1.0f);
-		}
-	}
 	// render all balls at background
-	/*c = App->scene_intro->circles.getFirst();
+	c = circles.getFirst();
 	while (c != NULL)
 	{
 
@@ -230,24 +237,17 @@ update_status ModuleLevel::Update()
 		
 		if (c->data->body->GetFixtureList()->GetFilterData().categoryBits == GROUND || c->data->body->GetFixtureList()->GetFilterData().categoryBits == START)
 		{
-			App->renderer->Blit(App->scene_intro->circle, x, y, NULL, 1.0f);
+			App->renderer->Blit(circletexture, x, y, NULL, 1.0f);
 		}
 		c = c->next;
-	}*/
+	}
 	
 
 	//render lvl 1
 	App->renderer->Blit(lvl1, 0, 15, { (256, 432, 0, 0) }, 1.0f);
-	if (circle != nullptr) {
-		if (circle->body->GetFixtureList()->GetFilterData().categoryBits == LVL1)
-		{
-			int x, y;
-			circle->GetPosition(x, y);
-			App->renderer->Blit(circletexture, x, y, NULL, 1.0f);
-		}
-	}
+
 	//render all balls at lvl 1
-	/*c = App->scene_intro->circles.getFirst();
+	c = circles.getFirst();
 	while (c != NULL)
 	{
 
@@ -256,24 +256,15 @@ update_status ModuleLevel::Update()
 		
 		if (c->data->body->GetFixtureList()->GetFilterData().categoryBits == LVL1)
 		{
-			App->renderer->Blit(App->scene_intro->circle, x, y, NULL, 1.0f);
+			App->renderer->Blit(circletexture, x, y, NULL, 1.0f);
 		}
 		c = c->next;
-	}*/
+	}
 
 	//render lvl 2
 	App->renderer->Blit(lvl2, 0, 0, { (256, 432, 0, 0) }, 1.0f);
-	//render balls at lvl 2
-	if (circle != nullptr) {
-		if (circle->body->GetFixtureList()->GetFilterData().categoryBits == LVL2)
-		{
-			int x, y;
-			circle->GetPosition(x, y);
-			App->renderer->Blit(circletexture, x, y, NULL, 1.0f);
-		}
-	}
-	
-	/*c = App->scene_intro->circles.getFirst();
+	//render balls at lvl 2	
+	c = circles.getFirst();
 	while (c != NULL)
 	{
 
@@ -285,7 +276,7 @@ update_status ModuleLevel::Update()
 			App->renderer->Blit(circletexture, x, y, NULL, 1.0f);
 		}
 		c = c->next;
-	}*/
+	}
 
 	if (start == true && circle != nullptr)
 	{
@@ -294,16 +285,6 @@ update_status ModuleLevel::Update()
 			b2Vec2 a(PIXEL_TO_METERS(245), PIXEL_TO_METERS(410));
 			circle->body->SetTransform(a, circle->body->GetAngle());
 		}
-		/*c = App->scene_intro->circles.getFirst();
-		while (c != NULL)
-		{
-			if (c->data->body->GetFixtureList()->GetFilterData().categoryBits == GROUND)
-			{
-				b2Vec2 a(PIXEL_TO_METERS(245), PIXEL_TO_METERS(410));
-				c->data->body->SetTransform(a, c->data->body->GetAngle());		
-			}
-			c = c->next;
-		}*/
 		start = false;
 		ballatcannon = true;
 
@@ -321,23 +302,6 @@ update_status ModuleLevel::Update()
 			circle->body->ApplyForceToCenter(b2Vec2(-50, -50), true);
 			rdytostart = false;
 		}
-		/*c = App->scene_intro->circles.getFirst();
-		while (c != NULL)
-		{
-			if (c->data->body->GetFixtureList()->GetFilterData().categoryBits == GROUND)
-			{
-				c->data->body->SetLinearVelocity(b2Vec2(0, 0));
-				c->data->body->ApplyForceToCenter(b2Vec2(0, -50), true);
-			}
-			if (c->data->body->GetFixtureList()->GetFilterData().categoryBits == START)
-			{
-				c->data->body->SetLinearVelocity(b2Vec2(0, 0));
-				c->data->body->ApplyForceToCenter(b2Vec2(-50, -50), true);
-				rdytostart = false;
-			}
-			c = c->next;
-		}*/
-		
 	}
 	App->renderer->Blit(Top, 0, 0, { (256, 432, 0, 0) }, 1.0f);
 	fVector normal(0.0f, 0.0f);
@@ -353,13 +317,13 @@ void ModuleLevel::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		if (bodyB->body->GetType() == b2_dynamicBody && bodyA->body->GetFixtureList()->IsSensor() == true)
 		{
 			
-		//	p2List_item<PhysBody*>* c = App->scene_intro->circles.getFirst();
+			p2List_item<PhysBody*>* c = circles.getFirst();
 			b2Filter balllvl;
 			balllvl.categoryBits = bodyB->body->GetFixtureList()->GetFilterData().categoryBits;
 			balllvl.maskBits = bodyB->body->GetFixtureList()->GetFilterData().maskBits;
-			//while (c != NULL)
-			//{
-				if (circle->body == bodyB->body)
+			while (c != NULL)
+			{
+			if (c->data->body == bodyB->body)
 				{
 					if (bodyA == lvl1sensor)
 					{
@@ -380,7 +344,15 @@ void ModuleLevel::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 					}
 					if (bodyA == holesensor)
 					{
-						start = true;
+						if (ballatcannon == false)
+						{
+							start = true;
+							circle = c->data;
+						}
+						else
+						{
+							circlestodelete.add(c->data);
+						}
 						LOG("CREATED Body")
 					}
 					if (bodyA == Canonsensor)
@@ -389,9 +361,9 @@ void ModuleLevel::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 						balllvl.maskBits = START;
 						circle->body->SetLinearVelocity(b2Vec2(0, 0));
 					}
-					circle->body->GetFixtureList()->SetFilterData(balllvl);
-				//}
-				//c = c->next;
+					c->data->body->GetFixtureList()->SetFilterData(balllvl);
+				}
+				c = c->next;
 			}
 		}
 	}
