@@ -3,7 +3,6 @@
 #include "ModuleRender.h"
 #include "ModuleSensors.h"
 #include "ModuleLevel.h"
-
 #include "ModuleInput.h"
 #include "ModuleTextures.h"
 #include "ModuleAudio.h"
@@ -28,14 +27,19 @@ ModuleLevel::~ModuleLevel()
 bool ModuleLevel::Start()
 {
 	LOG("Loading Level");
+
 	bool ret = true;
 
+	inmortal = false;
+	playerslife = 0;
+
+	//create all map chains and sensors
 	createchains();
 	createsensors();
 	
-
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
+	//Textures
 	ground = App->textures->Load("pinball/background.png");
 	lvl1 = App->textures->Load("pinball/level1.png");
 	lvl2 = App->textures->Load("pinball/level2.png");
@@ -47,18 +51,20 @@ bool ModuleLevel::Start()
 	paddletexture = App->textures->Load("pinball/paddle.png");
 	paddle2texture = App->textures->Load("pinball/paddle2.png");
 
-	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
-
-
 	Top = App->textures->Load("pinball/topdetails.png");
 
-	
-	LightsAnim.PushBack({ 0,0,222,152 });
+	//Audio
+	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
+
+	//Lights Animations
+	LightsAnim.PushBack({0,0,222,152 });
 	LightsAnim.PushBack({ 222,0,222,152 });
 	LightsAnim.PushBack({ 0,153,222,152 });
 	LightsAnim.PushBack({ 222,153,222,152 });
 	LightsAnim.PushBack({ 0,305,222,152 });
 	LightsAnim.speed = 0.02f;
+
+	//Triangles Animations
 	LeftTriAnim.PushBack({ 0,0,21,40 });
 	LeftTriAnim.PushBack({ 21,0,21,40 });
 	LeftTriAnim.speed = 0.05f;
@@ -88,6 +94,7 @@ bool ModuleLevel::CleanUp()
 // Update: draw background
 update_status ModuleLevel::Update()
 {
+	//create circle at the begining of the game if press 1
 	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN && circle == nullptr && ballatcannon == false)
 	{
 		circle = App->physics->CreateCircle( 245 , 410, 7, GROUND, BALL | GROUND);
@@ -96,12 +103,28 @@ update_status ModuleLevel::Update()
 		circle->listener = App->sensors;
 		ballatcannon = true;
 	}
+
+	//create circle at mouse position
 	if (App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
 	{
 		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 7, GROUND, BALL | GROUND));
 		circles.getLast()->data->listener = this;
 		circles.getLast()->data->listener = App->sensors;
 	}
+
+	//reset player's life
+	if (App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
+	{
+		playerslife = 0;
+	}
+
+	//mode inmortal
+	if (App->input->GetKey(SDL_SCANCODE_I) == KEY_DOWN)
+	{
+		inmortal = !inmortal;
+	}
+
+	//throw balls from cannon
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && ballatcannon == true)
 	{
 		rdytostart = true;
@@ -126,8 +149,11 @@ update_status ModuleLevel::Update()
 		App->physics->PaddleStopR();
 
 	}
+
+
 	p2List_item<PhysBody*>* c = circlestodelete.getFirst();
 
+	//Delete extra circles that fall down if the cannon is full
 	while (c != NULL)
 	{
 		circles.del(circles.findNode(c->data));
@@ -142,6 +168,7 @@ update_status ModuleLevel::Update()
 	App->renderer->Blit(Tri, 57, 316, &(LeftTriAnim.GetCurrentFrame()), 1.0f);
 	App->renderer->Blit(Tri, 163, 316, &(RightTriAnim.GetCurrentFrame()), 1.0f);
 	App->renderer->Blit(LightsS, 14, 105, &(LightsAnim.GetCurrentFrame()), 1.0f);
+
 
 	if (App->sensors->DomeCounter >= 1)
 	{
@@ -207,7 +234,7 @@ update_status ModuleLevel::Update()
 
 	}
 
-
+	//Blit Left Paddles
 	c = paddlesL.getFirst();
 	while (c != NULL)
 	{
@@ -217,7 +244,7 @@ update_status ModuleLevel::Update()
 		App->renderer->Blit(paddletexture, x - 1, y, NULL, 1.0f, c->data->GetRotation(), 0, 0);
 		c = c->next;
 	}
-
+	//Blit Right Paddles
 	c = paddlesR.getFirst();
 	while (c != NULL)
 	{
@@ -227,7 +254,7 @@ update_status ModuleLevel::Update()
 		App->renderer->Blit(paddle2texture, x, y, NULL, 1.0f, c->data->GetRotation(), 0, 0);
 		c = c->next;
 	}
-	// render all balls at background
+	// Render all balls at background
 	c = circles.getFirst();
 	while (c != NULL)
 	{
@@ -258,16 +285,16 @@ update_status ModuleLevel::Update()
 		{
 			App->renderer->Blit(circletexture, x, y, NULL, 1.0f);
 		}
-		c = c->next;
+		c = c->next; 
 	}
 
 	//render lvl 2
 	App->renderer->Blit(lvl2, 0, 0, { (256, 432, 0, 0) }, 1.0f);
+	
 	//render balls at lvl 2	
 	c = circles.getFirst();
 	while (c != NULL)
 	{
-
 		int x, y;
 		c->data->GetPosition(x, y);
 
@@ -278,33 +305,39 @@ update_status ModuleLevel::Update()
 		c = c->next;
 	}
 
-	if (start == true && circle != nullptr)
+	//move the ball back to the cannon
+	if (playerslife < 3 || inmortal == true)
 	{
-		if (circle->body->GetFixtureList()->GetFilterData().categoryBits == GROUND)
+		if (start == true && circle != nullptr)
 		{
-			b2Vec2 a(PIXEL_TO_METERS(245), PIXEL_TO_METERS(410));
-			circle->body->SetTransform(a, circle->body->GetAngle());
-		}
-		start = false;
-		ballatcannon = true;
+			if (circle->body->GetFixtureList()->GetFilterData().categoryBits == GROUND)
+			{
+				b2Vec2 a(PIXEL_TO_METERS(245), PIXEL_TO_METERS(410));
+				circle->body->SetTransform(a, circle->body->GetAngle());
+			}
+			start = false;
+			ballatcannon = true;
 
-	}
-	if (rdytostart == true && circle != nullptr)
-	{
-		if (circle->body->GetFixtureList()->GetFilterData().categoryBits == GROUND)
-		{
-			circle->body->SetLinearVelocity(b2Vec2(0, 0));
-			circle->body->ApplyForceToCenter(b2Vec2(0, -50), true);
 		}
-		if (circle->body->GetFixtureList()->GetFilterData().categoryBits == START)
+		
+		//throws the ball from cannon
+		if (rdytostart == true && circle != nullptr)
 		{
-			circle->body->SetLinearVelocity(b2Vec2(0, 0));
-			circle->body->ApplyForceToCenter(b2Vec2(-50, -50), true);
-			rdytostart = false;
+			if (circle->body->GetFixtureList()->GetFilterData().categoryBits == GROUND)
+			{
+				circle->body->SetLinearVelocity(b2Vec2(0, 0));
+				circle->body->ApplyForceToCenter(b2Vec2(0, -50), true);
+			}
+			if (circle->body->GetFixtureList()->GetFilterData().categoryBits == START)
+			{
+				circle->body->SetLinearVelocity(b2Vec2(0, 0));
+				circle->body->ApplyForceToCenter(b2Vec2(-50, -50), true);
+				rdytostart = false;
+			}
 		}
 	}
+	//Blit top texture
 	App->renderer->Blit(Top, 0, 0, { (256, 432, 0, 0) }, 1.0f);
-	fVector normal(0.0f, 0.0f);
 	
 	return UPDATE_CONTINUE;
 }
@@ -348,12 +381,13 @@ void ModuleLevel::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 						{
 							start = true;
 							circle = c->data;
+							playerslife++;
+							LOG("CREATED Body")
 						}
 						else
 						{
 							circlestodelete.add(c->data);
 						}
-						LOG("CREATED Body")
 					}
 					if (bodyA == Canonsensor)
 					{

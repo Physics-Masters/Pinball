@@ -23,6 +23,11 @@ public:
 	void createsensors();
 
 public:
+
+
+	int playerslife;
+	bool inmortal;
+
 	//dynamic bodys
 	PhysBody* circle;
 	p2List<PhysBody*> paddlesL;
