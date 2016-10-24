@@ -21,8 +21,9 @@ public:
 
 public:
 	int DomeCounter;
+	int DiamondCount = 0;
 	bool AbleSpecial;
-	bool DiamondCount;
+	
 	
 	PhysBody* LTriBounce;
 	PhysBody* RTriBounce;

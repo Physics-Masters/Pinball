@@ -4,7 +4,7 @@
 
 #include "ModuleRender.h"
 #include "ModuleSensors.h"
-
+#include "ModuleWindow.h"
 #include "ModulePhysics.h"
 #include "p2Point.h"
 #include "math.h"
@@ -634,6 +634,10 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 	if (physA == App->sensors->Dome)
 	{
 		App->sensors->DomeCounter++;
+		if (App->sensors->DiamondCount == 4 && App->sensors->DomeCounter >= 1)
+		{
+			App->window->SetTitle("YOU WIN!!!!");
+		}
 		//App->level->points += 100;
 		
 	}

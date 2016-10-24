@@ -42,12 +42,16 @@ bool ModuleLevel::Start()
 	Tri = App->textures->Load("pinball/triangles.png");
 	LightsS = App->textures->Load("pinball/lights.png");
 	diamonds = App->textures->Load("pinball/Diamonds.png");
+<<<<<<< HEAD
 	circletexture = App->textures->Load("pinball/ball.png");
 	paddletexture = App->textures->Load("pinball/paddle.png");
 	paddle2texture = App->textures->Load("pinball/paddle2.png");
 
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 
+=======
+	Top = App->textures->Load("pinball/topdetails.png");
+>>>>>>> origin/master
 	
 	LightsAnim.PushBack({ 0,0,222,152 });
 	LightsAnim.PushBack({ 222,0,222,152 });
@@ -138,23 +142,51 @@ update_status ModuleLevel::Update()
 		//App->sensors->DiamondCount++;
 		
 	}
-	if (App->sensors->DiamondCount == 1)
+	SDL_Rect rect;
+	rect.x = 14;
+	rect.y = 0;
+	rect.w = 14;
+	rect.h = 14;
+	App->renderer->Blit(diamonds, 113, 342, &rect, 1.0f);
+	if (App->sensors->DiamondCount >= 1)
 	{
-		SDL_Rect rect;
+		
 		rect.x = 0;
 		rect.y = 0;
 		rect.w = 14;
 		rect.h = 14;
 		App->renderer->Blit(diamonds, 99, 336, &rect, 1.0f);
 	}
-	if (App->sensors->DiamondCount == 2)
+	if (App->sensors->DiamondCount >= 2)
 	{
-		SDL_Rect rect;
+		
 		rect.x = 28;
 		rect.y = 0;
 		rect.w = 14;
 		rect.h = 14;
-		App->renderer->Blit(diamonds, 104, 320, &rect, 1.0f);
+		App->renderer->Blit(diamonds, 105, 321, &rect, 1.0f);
+
+
+	}
+	if (App->sensors->DiamondCount >= 3)
+	{
+		
+		rect.x = 42;
+		rect.y = 0;
+		rect.w = 14;
+		rect.h = 14;
+		App->renderer->Blit(diamonds, 121, 321, &rect, 1.0f);
+
+
+	}
+	if (App->sensors->DiamondCount >= 4)
+	{
+		
+		rect.x = 56;
+		rect.y = 0;
+		rect.w = 14;
+		rect.h = 14;
+		App->renderer->Blit(diamonds, 127, 336, &rect, 1.0f);
 
 
 	}
@@ -307,7 +339,7 @@ update_status ModuleLevel::Update()
 		}*/
 		
 	}
-	
+	App->renderer->Blit(Top, 0, 0, { (256, 432, 0, 0) }, 1.0f);
 	fVector normal(0.0f, 0.0f);
 	
 	return UPDATE_CONTINUE;
