@@ -46,6 +46,12 @@ bool ModuleLevel::Start()
 	Tri = App->textures->Load("pinball/triangles.png");
 	LightsS = App->textures->Load("pinball/lights.png");
 	diamonds = App->textures->Load("pinball/Diamonds.png");
+	Win = App->textures->Load("pinball/Win.png");
+	Arrow = App->textures->Load("pinball/Arrow.png");
+	//
+	ArrowAnim.PushBack({ 0,0,26,29 });
+	ArrowAnim.PushBack({ 0,-1,26,31 });
+	ArrowAnim.speed = 0.05f;
 
 	circletexture = App->textures->Load("pinball/ball.png");
 	paddletexture = App->textures->Load("pinball/paddle.png");
@@ -173,6 +179,7 @@ update_status ModuleLevel::Update()
 	if (App->sensors->DomeCounter >= 1)
 	{
 		App->renderer->Blit(App->sensors->dome, 95, 226, NULL, 1.0f);
+
 	}
 	if (App->sensors->DomeCounter >= 2)
 	{
@@ -183,8 +190,8 @@ update_status ModuleLevel::Update()
 		App->renderer->Blit(App->sensors->dome, 129, 227, NULL, 1.0f);
 		App->sensors->AbleSpecial = true;
 		//App->sensors->DiamondCount++;
-		
 	}
+	
 	SDL_Rect rect;
 	rect.x = 14;
 	rect.y = 0;
@@ -338,7 +345,20 @@ update_status ModuleLevel::Update()
 	}
 	//Blit top texture
 	App->renderer->Blit(Top, 0, 0, { (256, 432, 0, 0) }, 1.0f);
-	
+	if (App->sensors->DomeCounter < 3)
+	{
+		App->renderer->Blit(Arrow, 108, 140, &(ArrowAnim.GetCurrentFrame()), 1.0f);
+	}
+	if (App->sensors->DomeCounter >= 3)
+	{
+		App->renderer->Blit(Arrow, 230, 170, &(ArrowAnim.GetCurrentFrame()), 1.0f);
+	}
+	//Blit win situation
+	if (App->sensors->DiamondCount == 4 && App->sensors->DomeCounter >= 1)
+	{
+		App->renderer->Blit(App->level->Win, 0, 100, NULL, 1.0f);
+	}
+
 	return UPDATE_CONTINUE;
 }
 
