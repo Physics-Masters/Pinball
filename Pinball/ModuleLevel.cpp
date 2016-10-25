@@ -75,7 +75,11 @@ bool ModuleLevel::Start()
 
 	//Audio
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
-
+	holeS = App->audio->LoadFx("pinball/hole.wav");
+	paddleS = App->audio->LoadFx("pinball/paddleSound.wav");
+	bounceS = App->audio->LoadFx("pinball/bounce.wav");
+	domeS = App->audio->LoadFx("pinball/dome.wav");
+	
 	//Lights Animations
 	LightsAnim.PushBack({0,0,222,152 });
 	LightsAnim.PushBack({ 222,0,222,152 });
@@ -91,6 +95,8 @@ bool ModuleLevel::Start()
 	RightTriAnim.PushBack({ 42,0,21,40 });
 	RightTriAnim.PushBack({ 63,0,21,40 });
 	RightTriAnim.speed = 0.05f;
+	App->audio->PlayMusic("pinball/Nightmaren.ogg", 1.0f);
+	
 
 	//LEFT PADDLES
 	paddlesL.add(App->physics->CreatePaddleL(90, 387, (30 * DEGTORAD), -30 * DEGTORAD, GROUND, GROUND | BALL));
@@ -155,6 +161,7 @@ update_status ModuleLevel::Update()
 	if (App->input->GetKey(SDL_SCANCODE_Q) == KEY_DOWN)
 	{
 		App->physics->PaddleMoveL();
+		App->audio->PlayFx(paddleS);
 	}
 	if (App->input->GetKey(SDL_SCANCODE_Q) == KEY_UP)
 	{
@@ -164,6 +171,7 @@ update_status ModuleLevel::Update()
 	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN)
 	{
 		App->physics->PaddleMoveR();
+		App->audio->PlayFx(paddleS);
 	}
 	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_UP)
 	{
@@ -194,6 +202,7 @@ update_status ModuleLevel::Update()
 	if (App->sensors->DomeCounter >= 1)
 	{
 		App->renderer->Blit(App->sensors->dome, 95, 226, NULL, 1.0f);
+		
 
 	}
 	if (App->sensors->DomeCounter >= 2)
@@ -397,7 +406,7 @@ void ModuleLevel::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 					{
 						balllvl.categoryBits = LVL1;
 						balllvl.maskBits = LVL1 | BALL;
-						App->audio->PlayFx(bonus_fx);
+						//App->audio->PlayFx(bonus_fx);
 					}
 					if (bodyA == lvl2sensor0 || bodyA == lvl2sensor1)
 					{
@@ -408,7 +417,7 @@ void ModuleLevel::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 					{
 						balllvl.categoryBits = GROUND;
 						balllvl.maskBits = GROUND | BALL;
-						App->audio->PlayFx(bonus_fx);
+						//App->audio->PlayFx(bonus_fx);
 					}
 					if (bodyA == holesensor)
 					{

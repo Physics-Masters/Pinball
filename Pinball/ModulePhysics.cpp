@@ -6,6 +6,7 @@
 #include "ModuleSensors.h"
 #include "ModuleWindow.h"
 #include "ModulePhysics.h"
+#include "ModuleAudio.h"
 #include "p2Point.h"
 #include "math.h"
 
@@ -591,7 +592,11 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 	PhysBody* physB = (PhysBody*)contact->GetFixtureB()->GetBody()->GetUserData();
 	if (physA == App->sensors->Dome)
 	{
-		App->sensors->DomeCounter++;
+		if (App->sensors->DomeCounter < 3)
+		{
+			App->sensors->DomeCounter++;
+			App->audio->PlayFx(App->level->domeS);
+		}
 		
 		//App->level->points += 100;
 		

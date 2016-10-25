@@ -18,13 +18,13 @@ ModuleSensors::~ModuleSensors()
 bool ModuleSensors::Start()
 {
 	int SLT[8] = {
-		58, 314,
+		60, 320,
 		75, 354,
 		68, 348,
 		58, 325
 	};
 	int SRT[8] = {
-		182, 314,
+		180, 320,
 		164, 354,
 		168, 348,
 		178, 325
@@ -121,6 +121,7 @@ void ModuleSensors::OnCollision(PhysBody* A , PhysBody* B)
 {
  	if (B == SpecialHole)
 	{
+		App->audio->PlayFx(App->level->holeS);
 		SpH = true;
 		if (AbleSpecial == true)
 		{
@@ -130,21 +131,30 @@ void ModuleSensors::OnCollision(PhysBody* A , PhysBody* B)
 				DomeCounter = 0;
 				AbleSpecial = false;
 			}
+			
 		}
 	}
 	if (B == TLHole)
 	{
 		TLH = true;
+		App->audio->PlayFx(App->level->holeS);
 	}
 	
 	if (B == TCHole)
 	{
 		TCH = true;
+		App->audio->PlayFx(App->level->holeS);
 	}
 	if (B == TRHole)
 	{
 		TRH = true;
+		App->audio->PlayFx(App->level->holeS);
 	}
+	if (B == LTriBounce || B == RTriBounce)
+	{
+		App->audio->PlayFx(App->level->bounceS);
+	}
+	
 	
 	//DomeCounter++;
 

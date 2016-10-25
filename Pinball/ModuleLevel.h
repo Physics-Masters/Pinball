@@ -72,7 +72,12 @@ public:
 	SDL_Texture* Win;
 	SDL_Texture* Arrow;
 	SDL_Texture* Particle;
-
+	//sound effects
+	uint holeS;
+	uint domeS;
+	uint launchS;
+	uint bounceS;
+	uint paddleS;
 	//lvl textures
 	SDL_Texture* Tri; 
 	SDL_Texture* ground;
@@ -81,5 +86,6 @@ public:
 	SDL_Texture* circletexture;
 	SDL_Texture* paddletexture;
 	SDL_Texture* paddle2texture;
+
 	uint bonus_fx;
 };
