@@ -57,9 +57,9 @@ bool ModuleSensors::Start()
 		209, 84,
 		197, 80
 	};
-	Holes.add(App->physics->CreatePolySensor(0, 0, Hole, 8, GROUND, GROUND | BALL));
-	Holes.add(App->physics->CreatePolySensor(0, 0, LHole, 8, GROUND, GROUND | BALL));
-	Holes.add(App->physics->CreatePolySensor(0, 0, SHole, 8, GROUND, GROUND | BALL));
+	TCHole = (App->physics->CreatePolySensor(0, 0, Hole, 8, GROUND, GROUND | BALL));
+	TLHole = (App->physics->CreatePolySensor(0, 0, LHole, 8, GROUND, GROUND | BALL));
+	TRHole = (App->physics->CreatePolySensor(0, 0, SHole, 8, GROUND, GROUND | BALL));
 	SpecialHole = App->physics->CreatePolySensor(0, 0, SpHole,8, GROUND, GROUND | BALL);
 
 	LTriBounce = App->physics->CreateChain(0, 0, SLT, 8, GROUND, GROUND | BALL);;
@@ -72,7 +72,47 @@ bool ModuleSensors::Start()
 }
 update_status ModuleSensors::Update()
 {
-	
+	if (SpH == true)
+	{
+		App->renderer->Blit(App->level->Particle, 230, 207, &(App->level->ParticleAnim.GetCurrentFrame()), 1.0f);
+		if (App->level->ParticleAnim.Finished())
+		{
+			App->level->ParticleAnim.Reset();
+			SpH = false;
+		}
+		
+	}
+	if (TLH == true)
+	{
+		App->renderer->Blit(App->level->Particle, 94, 91, &(App->level->ParticleAnim.GetCurrentFrame()), 1.0f);
+		if (App->level->ParticleAnim.Finished())
+		{
+			App->level->ParticleAnim.Reset();
+			TLH = false;
+		}
+
+	}
+	if (TCH == true)
+	{
+		App->renderer->Blit(App->level->Particle, 140,120, &(App->level->ParticleAnim.GetCurrentFrame()), 1.0f);
+		if (App->level->ParticleAnim.Finished())
+		{
+			App->level->ParticleAnim.Reset();
+			TCH = false;
+		}
+
+	}
+	if (TRH == true)
+	{
+		App->renderer->Blit(App->level->Particle, 189, 72, &(App->level->ParticleAnim.GetCurrentFrame()), 1.0f);
+		if (App->level->ParticleAnim.Finished())
+		{
+			App->level->ParticleAnim.Reset();
+			TRH = false;
+		}
+
+	}
+	//printef = false;
 	
 	
 	return UPDATE_CONTINUE;
@@ -81,6 +121,7 @@ void ModuleSensors::OnCollision(PhysBody* A , PhysBody* B)
 {
  	if (B == SpecialHole)
 	{
+		SpH = true;
 		if (AbleSpecial == true)
 		{
 			DiamondCount++;
@@ -90,6 +131,19 @@ void ModuleSensors::OnCollision(PhysBody* A , PhysBody* B)
 				AbleSpecial = false;
 			}
 		}
+	}
+	if (B == TLHole)
+	{
+		TLH = true;
+	}
+	
+	if (B == TCHole)
+	{
+		TCH = true;
+	}
+	if (B == TRHole)
+	{
+		TRH = true;
 	}
 	
 	//DomeCounter++;

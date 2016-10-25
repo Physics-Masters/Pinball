@@ -64,12 +64,14 @@ public:
 	Animation RightTriAnim;
 	Animation LightsAnim;
 	Animation ArrowAnim;
+	Animation ParticleAnim;
 	//efects textures
 	SDL_Texture* LightsS;
 	SDL_Texture* diamonds;
 	SDL_Texture* Top;
 	SDL_Texture* Win;
 	SDL_Texture* Arrow;
+	SDL_Texture* Particle;
 
 	//lvl textures
 	SDL_Texture* Tri; 

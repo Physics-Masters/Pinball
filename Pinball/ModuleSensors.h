@@ -23,12 +23,19 @@ public:
 	int DomeCounter;
 	int DiamondCount = 0;
 	bool AbleSpecial;
+	bool SpH = false;
+	bool TLH = false;
+	bool TRH = false;
+	bool TCH = false;
 	
 	
 	PhysBody* LTriBounce;
 	PhysBody* RTriBounce;
 	PhysBody* Dome;
 	PhysBody* SpecialHole;
+	PhysBody* TLHole;
+	PhysBody* TRHole;
+	PhysBody* TCHole;
 	p2List<PhysBody*> Holes;
 	//ANIMATIONS AND TEXTURES
 	SDL_Texture* dome;

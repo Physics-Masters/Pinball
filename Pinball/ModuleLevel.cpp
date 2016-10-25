@@ -29,7 +29,7 @@ bool ModuleLevel::Start()
 	LOG("Loading Level");
 
 	bool ret = true;
-
+	
 	inmortal = false;
 	playerslife = 0;
 
@@ -48,7 +48,21 @@ bool ModuleLevel::Start()
 	diamonds = App->textures->Load("pinball/Diamonds.png");
 	Win = App->textures->Load("pinball/Win.png");
 	Arrow = App->textures->Load("pinball/Arrow.png");
-	//
+	Particle = App->textures->Load("pinball/particle.png");
+	
+	
+	ParticleAnim.PushBack({ -24,0,24,24 });
+	ParticleAnim.PushBack({ 0,0,24,24 });
+	ParticleAnim.PushBack({ 24,0,24,24 });
+	ParticleAnim.PushBack({ 48,0,24,24 });
+	ParticleAnim.PushBack({ 72,0,24,24 });
+	ParticleAnim.PushBack({ 96,0,24,24 });
+	//ParticleAnim.PushBack({ 120,0,24,24 });
+	ParticleAnim.loop = true;
+	
+	ParticleAnim.speed = 0.15f;
+
+	
 	ArrowAnim.PushBack({ 0,0,26,29 });
 	ArrowAnim.PushBack({ 0,-1,26,31 });
 	ArrowAnim.speed = 0.05f;
@@ -100,6 +114,7 @@ bool ModuleLevel::CleanUp()
 // Update: draw background
 update_status ModuleLevel::Update()
 {
+	
 	//create circle at the begining of the game if press 1
 	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN && circle == nullptr && ballatcannon == false)
 	{
@@ -358,7 +373,7 @@ update_status ModuleLevel::Update()
 	{
 		App->renderer->Blit(App->level->Win, 0, 100, NULL, 1.0f);
 	}
-
+	//App->renderer->Blit(Particle, 0, 0, &(App->level->ParticleAnim.GetCurrentFrame()), 1.0f);
 	return UPDATE_CONTINUE;
 }
 
@@ -837,6 +852,7 @@ void ModuleLevel::createchains()
 	mapchains.add(App->physics->CreateChain(0, 0, circleboss, 36, GROUND, GROUND));
 	mapchains.add(App->physics->CreateChain(0, 0, leftbarrier, 8, GROUND, GROUND));
 	mapchains.add(App->physics->CreateChain(0, 0, rightbarrier, 8, GROUND, GROUND));
+	
 
 }
 
