@@ -597,8 +597,7 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 			App->sensors->DomeCounter++;
 			App->audio->PlayFx(App->level->domeS);
 		}
-		
-		//App->level->points += 100;
+		App->level->puntuation += 500;
 		
 	}
 	if(physA && physA->listener != NULL)

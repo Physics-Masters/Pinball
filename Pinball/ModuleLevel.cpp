@@ -32,6 +32,8 @@ bool ModuleLevel::Start()
 	
 	inmortal = false;
 	playerslife = 0;
+	puntuation = 0;
+	bestpuntuation = 0;
 
 	//create all map chains and sensors
 	createchains();
@@ -90,7 +92,8 @@ bool ModuleLevel::Start()
 	bounceS = App->audio->LoadFx("pinball/bounce.wav");
 	domeS = App->audio->LoadFx("pinball/dome.wav");
 	launchS = App->audio->LoadFx("pinball/Launch.wav");
-	
+	App->audio->PlayMusic("pinball/Nightmaren.ogg", 1.0f);
+
 	//Lights Animations
 	LightsAnim.PushBack({0,0,222,152 });
 	LightsAnim.PushBack({ 222,0,222,152 });
@@ -106,17 +109,8 @@ bool ModuleLevel::Start()
 	RightTriAnim.PushBack({ 42,0,21,40 });
 	RightTriAnim.PushBack({ 63,0,21,40 });
 	RightTriAnim.speed = 0.05f;
-	App->audio->PlayMusic("pinball/Nightmaren.ogg", 1.0f);
 	
-
-	//LEFT PADDLES
-	paddlesL.add(App->physics->CreatePaddleL(90, 387, (30 * DEGTORAD), -30 * DEGTORAD, GROUND, GROUND | BALL));
-	paddlesL.add(App->physics->CreatePaddleL(32, 185, (70 * DEGTORAD), 35 * DEGTORAD, GROUND, GROUND | BALL));
-	//RIGHT PADDLES
-	paddlesR.add(App->physics->CreatePaddleR(150, 387, (146 * DEGTORAD), 90 * DEGTORAD, GROUND, GROUND | BALL));
-	paddlesR.add(App->physics->CreatePaddleR(222, 258, (100 * DEGTORAD), 40 * DEGTORAD, GROUND, GROUND | BALL));
-
-		
+			
 	return ret;
 }
 
@@ -148,12 +142,20 @@ update_status ModuleLevel::Update()
 		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 7, GROUND, BALL | GROUND));
 		circles.getLast()->data->listener = this;
 		circles.getLast()->data->listener = App->sensors;
+		if (circle == nullptr)
+		{
+			circle = circles.getFirst()->data;
+		}
 	}
 
 	//reset player's life
 	if (App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
 	{
 		playerslife = 0;
+		puntuation = 0;
+		App->sensors->DiamondCount = 0;
+		App->sensors->DomeCounter = 0;
+		inmortal = false;		
 	}
 
 	//mode inmortal
@@ -276,6 +278,11 @@ update_status ModuleLevel::Update()
 		App->renderer->Blit(diamonds, 127, 336, &rect, 1.0f);
 
 
+	}
+
+	if (puntuation > bestpuntuation)
+	{
+		bestpuntuation = puntuation;
 	}
 
 	//Blit Left Paddles
@@ -439,22 +446,23 @@ void ModuleLevel::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 					{
 						balllvl.categoryBits = LVL1;
 						balllvl.maskBits = LVL1 | BALL;
-						//App->audio->PlayFx(bonus_fx);
+						puntuation += 1000;
 					}
 					if (bodyA == lvl2sensor0 || bodyA == lvl2sensor1)
 					{
 						balllvl.categoryBits = LVL2;
 						balllvl.maskBits = LVL2 | BALL;
+						puntuation += 1000;
 					}
 					if (bodyA == lvl1growndsensor0 || bodyA == lvl1growndsensor1 || bodyA == lvl2growndsensor0 || bodyA == lvl2growndsensor1 || bodyA == lvl2growndsensor2 || bodyA == exitfromcanon)
 					{
 						balllvl.categoryBits = GROUND;
 						balllvl.maskBits = GROUND | BALL;
-						//App->audio->PlayFx(bonus_fx);
+						puntuation += 1000;
 					}
 					if (bodyA == holesensor)
 					{
-						if (ballatcannon == false)
+						if ((ballatcannon == false && playerslife < 3)||(ballatcannon == false && inmortal == true))
 						{
 							start = true;
 							circle = c->data;
@@ -895,6 +903,13 @@ void ModuleLevel::createchains()
 	mapchains.add(App->physics->CreateChain(0, 0, leftbarrier, 8, GROUND, GROUND));
 	mapchains.add(App->physics->CreateChain(0, 0, rightbarrier, 8, GROUND, GROUND));
 	
+	//LEFT PADDLES
+	paddlesL.add(App->physics->CreatePaddleL(90, 387, (30 * DEGTORAD), -30 * DEGTORAD, GROUND, GROUND | BALL));
+	paddlesL.add(App->physics->CreatePaddleL(32, 185, (70 * DEGTORAD), 35 * DEGTORAD, GROUND, GROUND | BALL));
+	//RIGHT PADDLES
+	paddlesR.add(App->physics->CreatePaddleR(150, 387, (146 * DEGTORAD), 90 * DEGTORAD, GROUND, GROUND | BALL));
+	paddlesR.add(App->physics->CreatePaddleR(222, 258, (100 * DEGTORAD), 40 * DEGTORAD, GROUND, GROUND | BALL));
+
 
 }
 

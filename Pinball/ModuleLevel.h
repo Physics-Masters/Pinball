@@ -24,9 +24,10 @@ public:
 
 public:
 
-
+	int puntuation;
 	int playerslife;
 	bool inmortal;
+	int bestpuntuation;
 
 	//dynamic bodys
 	PhysBody* circle;

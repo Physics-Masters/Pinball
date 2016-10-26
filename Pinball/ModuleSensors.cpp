@@ -131,28 +131,34 @@ void ModuleSensors::OnCollision(PhysBody* A , PhysBody* B)
 				DomeCounter = 0;
 				AbleSpecial = false;
 			}
-			
+			App->level->puntuation += 10000;	
 		}
+		else App->level->puntuation += 2500;
+		LOG("PUNTUATION: %d", App->level->puntuation);
 	}
 	if (B == TLHole)
 	{
 		TLH = true;
 		App->audio->PlayFx(App->level->holeS);
+		App->level->puntuation += 2000;
 	}
 	
 	if (B == TCHole)
 	{
 		TCH = true;
 		App->audio->PlayFx(App->level->holeS);
+		App->level->puntuation += 2000;
 	}
 	if (B == TRHole)
 	{
 		TRH = true;
 		App->audio->PlayFx(App->level->holeS);
+		App->level->puntuation += 2000;
 	}
 	if (B == LTriBounce || B == RTriBounce)
 	{
 		App->audio->PlayFx(App->level->bounceS);
+		App->level->puntuation += 2000;
 	}
 	
 	

@@ -1,6 +1,8 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleWindow.h"
+#include "ModuleLevel.h"
+#include "p2SString.h"
 
 ModuleWindow::ModuleWindow(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -67,6 +69,15 @@ bool ModuleWindow::Init()
 
 	return ret;
 }
+
+update_status ModuleWindow::Update()
+{
+	p2SString title("Lifes: %d Score: %d TOP: %d", 3 - App->level->playerslife, App->level->puntuation, App->level->bestpuntuation);
+	SetTitle(title.GetString());
+
+	return UPDATE_CONTINUE;
+}
+
 
 // Called before quitting
 bool ModuleWindow::CleanUp()
