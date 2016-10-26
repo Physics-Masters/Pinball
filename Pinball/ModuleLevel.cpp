@@ -49,8 +49,22 @@ bool ModuleLevel::Start()
 	Win = App->textures->Load("pinball/Win.png");
 	Arrow = App->textures->Load("pinball/Arrow.png");
 	Particle = App->textures->Load("pinball/particle.png");
+	cannon = App->textures->Load("pinball/cannon.png");
+	circletexture = App->textures->Load("pinball/ball.png");
+	paddletexture = App->textures->Load("pinball/paddle.png");
+	paddle2texture = App->textures->Load("pinball/paddle2.png");
+	Top = App->textures->Load("pinball/topdetails.png");
 	
-	
+
+	CannonAnim.PushBack({ 0,0,31,36 });
+	CannonAnim.PushBack({ 0,0,31,36 });
+	CannonAnim.PushBack({ 31,0,31,36 });
+	CannonAnim.PushBack({ 62,0,31,36 });
+	CannonAnim.PushBack({ 31,0,31,36 });
+	CannonAnim.PushBack({ 0,0,31,36 });
+	CannonAnim.loop = false;
+	CannonAnim.speed = 0.2f;
+
 	ParticleAnim.PushBack({ -24,0,24,24 });
 	ParticleAnim.PushBack({ 0,0,24,24 });
 	ParticleAnim.PushBack({ 24,0,24,24 });
@@ -67,11 +81,7 @@ bool ModuleLevel::Start()
 	ArrowAnim.PushBack({ 0,-1,26,31 });
 	ArrowAnim.speed = 0.05f;
 
-	circletexture = App->textures->Load("pinball/ball.png");
-	paddletexture = App->textures->Load("pinball/paddle.png");
-	paddle2texture = App->textures->Load("pinball/paddle2.png");
-
-	Top = App->textures->Load("pinball/topdetails.png");
+	
 
 	//Audio
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
@@ -79,6 +89,7 @@ bool ModuleLevel::Start()
 	paddleS = App->audio->LoadFx("pinball/paddleSound.wav");
 	bounceS = App->audio->LoadFx("pinball/bounce.wav");
 	domeS = App->audio->LoadFx("pinball/dome.wav");
+	launchS = App->audio->LoadFx("pinball/Launch.wav");
 	
 	//Lights Animations
 	LightsAnim.PushBack({0,0,222,152 });
@@ -154,6 +165,8 @@ update_status ModuleLevel::Update()
 	//throw balls from cannon
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && ballatcannon == true)
 	{
+		App->audio->PlayFx(launchS);
+		cannonanim = true;
 		rdytostart = true;
 		ballatcannon = false;
 	}
@@ -354,6 +367,7 @@ update_status ModuleLevel::Update()
 		//throws the ball from cannon
 		if (rdytostart == true && circle != nullptr)
 		{
+			
 			if (circle->body->GetFixtureList()->GetFilterData().categoryBits == GROUND)
 			{
 				circle->body->SetLinearVelocity(b2Vec2(0, 0));
@@ -382,7 +396,26 @@ update_status ModuleLevel::Update()
 	{
 		App->renderer->Blit(App->level->Win, 0, 100, NULL, 1.0f);
 	}
-	//App->renderer->Blit(Particle, 0, 0, &(App->level->ParticleAnim.GetCurrentFrame()), 1.0f);
+	//Blit cannon
+	if (cannonanim == true)
+	{
+		App->renderer->Blit(cannon, 223, 270, &(CannonAnim.GetCurrentFrame()), 1.0f);
+		if (CannonAnim.Finished())
+		{
+			CannonAnim.Reset();
+			cannonanim = false;
+		}
+	}
+	else
+	{
+		SDL_Rect stpcan;
+		stpcan.x = stpcan.y = 0;
+		stpcan.w = 31;
+		stpcan.h = 36;
+
+		App->renderer->Blit(cannon, 223, 270, &(stpcan), 1.0f);
+	}
+	
 	return UPDATE_CONTINUE;
 }
 

@@ -58,6 +58,7 @@ public:
 	bool start;
 	bool rdytostart;
 	bool ballatcannon;
+	bool cannonanim = false;
 
 	//Animations
 	Animation LeftTriAnim;
@@ -65,6 +66,7 @@ public:
 	Animation LightsAnim;
 	Animation ArrowAnim;
 	Animation ParticleAnim;
+	Animation CannonAnim;
 	//efects textures
 	SDL_Texture* LightsS;
 	SDL_Texture* diamonds;
@@ -72,6 +74,7 @@ public:
 	SDL_Texture* Win;
 	SDL_Texture* Arrow;
 	SDL_Texture* Particle;
+	SDL_Texture* cannon;
 	//sound effects
 	uint holeS;
 	uint domeS;
