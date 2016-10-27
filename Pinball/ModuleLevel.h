@@ -21,6 +21,7 @@ public:
 	//start functions
 	void createchains();
 	void createsensors();
+	void ballstart();
 
 public:
 

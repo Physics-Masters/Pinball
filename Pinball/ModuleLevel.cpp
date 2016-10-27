@@ -134,11 +134,7 @@ update_status ModuleLevel::Update()
 	//create circle at the begining of the game if press 1
 	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN && circle == nullptr && ballatcannon == false)
 	{
-		circle = App->physics->CreateCircle( 245 , 410, 7, GROUND, BALL | GROUND);
-		circles.add(circle);
-		circle->listener = this;
-		circle->listener = App->sensors;
-		ballatcannon = true;
+		ballstart();
 	}
 
 	//create circle at mouse position
@@ -161,6 +157,8 @@ update_status ModuleLevel::Update()
 		App->sensors->DiamondCount = 0;
 		App->sensors->DomeCounter = 0;
 		inmortal = false;		
+		circle = nullptr;
+		ballstart();
 	}
 
 	//mode inmortal
@@ -477,6 +475,7 @@ void ModuleLevel::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 						balllvl.categoryBits = GROUND;
 						balllvl.maskBits = GROUND | BALL;
 						start = false;
+						rdytostart = false;
 						ballatcannon = false;
 					}
 					if (bodyA == holesensor)
@@ -486,7 +485,7 @@ void ModuleLevel::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 							start = true;
 							circle = c->data;
 							playerslife++;
-							if (playerslife < 3)
+							if (playerslife < 3 || inmortal == true)
 							{
 								App->audio->PlayFx(ballsafe);
 							}
@@ -510,6 +509,15 @@ void ModuleLevel::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			}
 		}
 	}
+}
+
+void ModuleLevel::ballstart()
+{
+	circle = App->physics->CreateCircle(245, 410, 7, GROUND, BALL | GROUND);
+	circles.add(circle);
+	circle->listener = this;
+	circle->listener = App->sensors;
+	ballatcannon = true;
 }
 
 
