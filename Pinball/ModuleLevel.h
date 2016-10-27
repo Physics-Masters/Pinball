@@ -68,6 +68,7 @@ public:
 	Animation ArrowAnim;
 	Animation ParticleAnim;
 	Animation CannonAnim;
+	Animation RestartAnim;
 	//efects textures
 	SDL_Texture* LightsS;
 	SDL_Texture* diamonds;
@@ -76,6 +77,7 @@ public:
 	SDL_Texture* Arrow;
 	SDL_Texture* Particle;
 	SDL_Texture* cannon;
+	SDL_Texture* Restart;
 	//sound effects
 	uint holeS;
 	uint domeS;

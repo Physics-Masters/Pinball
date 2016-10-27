@@ -56,7 +56,11 @@ bool ModuleLevel::Start()
 	paddletexture = App->textures->Load("pinball/paddle.png");
 	paddle2texture = App->textures->Load("pinball/paddle2.png");
 	Top = App->textures->Load("pinball/topdetails.png");
-	
+	Restart = App->textures->Load("pinball/restart.png");
+
+	RestartAnim.PushBack({ 0,0,256,44 });
+	RestartAnim.PushBack({ 0,44,256,44 });
+	RestartAnim.speed = 0.1f;
 
 	CannonAnim.PushBack({ 0,0,31,36 });
 	CannonAnim.PushBack({ 0,0,31,36 });
@@ -150,7 +154,7 @@ update_status ModuleLevel::Update()
 	}
 
 	//reset player's life
-	if (App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
 	{
 		playerslife = 0;
 		puntuation = 0;
@@ -174,22 +178,22 @@ update_status ModuleLevel::Update()
 		ballatcannon = false;
 	}
 	//MAKES PADDLES MOVE
-	if (App->input->GetKey(SDL_SCANCODE_Q) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN)
 	{
 		App->physics->PaddleMoveL();
 		App->audio->PlayFx(paddleS);
 	}
-	if (App->input->GetKey(SDL_SCANCODE_Q) == KEY_UP)
+	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_UP)
 	{
 		App->physics->PaddleStopL();
 
 	}
-	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN)
 	{
 		App->physics->PaddleMoveR();
 		App->audio->PlayFx(paddleS);
 	}
-	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_UP)
+	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_UP)
 	{
 		App->physics->PaddleStopR();
 
@@ -401,9 +405,10 @@ update_status ModuleLevel::Update()
 		App->renderer->Blit(Arrow, 230, 170, &(ArrowAnim.GetCurrentFrame()), 1.0f);
 	}
 	//Blit win situation
-	if (App->sensors->DiamondCount == 4 && App->sensors->DomeCounter >= 1)
+	if (App->sensors->DiamondCount >= 4 && App->sensors->DomeCounter >= 1)
 	{
 		App->renderer->Blit(App->level->Win, 0, 100, NULL, 1.0f);
+		App->renderer->Blit(Restart, 0, 170, &RestartAnim.GetCurrentFrame(), 1.0f);
 	}
 	//Blit cannon
 	if (cannonanim == true)
@@ -423,6 +428,11 @@ update_status ModuleLevel::Update()
 		stpcan.h = 36;
 
 		App->renderer->Blit(cannon, 223, 270, &(stpcan), 1.0f);
+		if (playerslife == 3 && inmortal == false)
+		{
+			App->renderer->Blit(Restart, 0, 150, &RestartAnim.GetCurrentFrame(), 1.0f);
+		}
+		
 	}
 	
 	return UPDATE_CONTINUE;
