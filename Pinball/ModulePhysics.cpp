@@ -610,5 +610,12 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 
 void ModulePhysics::DestroyBodys(PhysBody &body)
 {
+	
+	if (body.body->GetJointList() != nullptr)
+	{
+		world->DestroyJoint(mouse_joint);
+		mouse_joint = nullptr;
+	}
+	
 	world->DestroyBody(body.body);
 }

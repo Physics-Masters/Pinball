@@ -466,11 +466,18 @@ void ModuleLevel::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 						balllvl.maskBits = LVL2 | BALL;
 						puntuation += 1000;
 					}
-					if (bodyA == lvl1growndsensor0 || bodyA == lvl1growndsensor1 || bodyA == lvl2growndsensor0 || bodyA == lvl2growndsensor1 || bodyA == lvl2growndsensor2 || bodyA == exitfromcanon)
+					if (bodyA == lvl1growndsensor0 || bodyA == lvl1growndsensor1 || bodyA == lvl2growndsensor0 || bodyA == lvl2growndsensor1 || bodyA == lvl2growndsensor2)
 					{
 						balllvl.categoryBits = GROUND;
 						balllvl.maskBits = GROUND | BALL;
 						puntuation += 1000;
+					}
+					if (bodyA == exitfromcanon)
+					{
+						balllvl.categoryBits = GROUND;
+						balllvl.maskBits = GROUND | BALL;
+						start = false;
+						ballatcannon = false;
 					}
 					if (bodyA == holesensor)
 					{
