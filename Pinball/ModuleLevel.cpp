@@ -92,6 +92,7 @@ bool ModuleLevel::Start()
 	bounceS = App->audio->LoadFx("pinball/bounce.wav");
 	domeS = App->audio->LoadFx("pinball/dome.wav");
 	launchS = App->audio->LoadFx("pinball/Launch.wav");
+	ballsafe = App->audio->LoadFx("pinball/ballsaved.wav");
 	App->audio->PlayMusic("pinball/Nightmaren.ogg", 1.0f);
 
 	//Lights Animations
@@ -365,6 +366,7 @@ update_status ModuleLevel::Update()
 			{
 				b2Vec2 a(PIXEL_TO_METERS(245), PIXEL_TO_METERS(410));
 				circle->body->SetTransform(a, circle->body->GetAngle());
+				
 			}
 			start = false;
 			ballatcannon = true;
@@ -467,6 +469,11 @@ void ModuleLevel::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 							start = true;
 							circle = c->data;
 							playerslife++;
+							if (playerslife < 3)
+							{
+								App->audio->PlayFx(ballsafe);
+							}
+							
 							LOG("CREATED Body")
 						}
 						else
@@ -678,10 +685,10 @@ void ModuleLevel::createchains()
 		204, 345,
 		201, 354,
 		196, 359,
-		152, 381,
-		155, 383,
-		157, 387,
-		161, 386,
+		155, 381,
+		158, 383,
+		160, 387,
+		164, 386,
 		201, 366,
 		204, 364,
 		208, 360,
@@ -907,7 +914,7 @@ void ModuleLevel::createchains()
 	paddlesL.add(App->physics->CreatePaddleL(90, 387, (30 * DEGTORAD), -30 * DEGTORAD, GROUND, GROUND | BALL));
 	paddlesL.add(App->physics->CreatePaddleL(32, 185, (70 * DEGTORAD), 35 * DEGTORAD, GROUND, GROUND | BALL));
 	//RIGHT PADDLES
-	paddlesR.add(App->physics->CreatePaddleR(150, 387, (146 * DEGTORAD), 90 * DEGTORAD, GROUND, GROUND | BALL));
+	paddlesR.add(App->physics->CreatePaddleR(153, 387, (146 * DEGTORAD), 90 * DEGTORAD, GROUND, GROUND | BALL));
 	paddlesR.add(App->physics->CreatePaddleR(222, 258, (100 * DEGTORAD), 40 * DEGTORAD, GROUND, GROUND | BALL));
 
 

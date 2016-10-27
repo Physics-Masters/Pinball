@@ -82,6 +82,7 @@ public:
 	uint launchS;
 	uint bounceS;
 	uint paddleS;
+	uint ballsafe;
 	//lvl textures
 	SDL_Texture* Tri; 
 	SDL_Texture* ground;
