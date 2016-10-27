@@ -110,10 +110,11 @@ PhysBody* ModulePhysics::CreatePaddleL(int x, int y, float angd, float angu, uin
 		p[i].y = PIXEL_TO_METERS(points[i * 2 + 1]);
 	}
 	shape2.Set(p, 8);
+	delete[] p;
 	b2FixtureDef fixture2;
 	fixture2.shape = &shape2;
 	fixture2.density = 2.0f;
-
+	
 	b2->CreateFixture(&fixture2);
 	
 	PhysBody* pbody2 = new PhysBody();
@@ -280,7 +281,7 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, uint16 categoryb
 	pbody->body = b;
 	b->SetUserData(pbody);
 	pbody->width = pbody->height = radius;
-
+	
 	return pbody;
 }
 PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height, uint16 categorybits, uint16 maskbits)
