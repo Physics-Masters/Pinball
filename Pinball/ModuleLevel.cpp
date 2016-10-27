@@ -157,8 +157,6 @@ update_status ModuleLevel::Update()
 		App->sensors->DiamondCount = 0;
 		App->sensors->DomeCounter = 0;
 		inmortal = false;		
-		circle = nullptr;
-		ballstart();
 	}
 
 	//mode inmortal
@@ -489,7 +487,6 @@ void ModuleLevel::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 							{
 								App->audio->PlayFx(ballsafe);
 							}
-							
 							LOG("CREATED Body")
 						}
 						else
